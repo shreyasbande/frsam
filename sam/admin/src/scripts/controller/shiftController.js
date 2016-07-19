@@ -33,21 +33,17 @@ export default class ShiftController {
 				.then((result) => {
 					this.shifts = result;
 					console.log("shift master: ", JSON.stringify(result));
+					return this.getEmployeeShifts($http, $q, weekNo, year);
 				})
-				.catch((error) => {
-					this.errors.push("no dates were registered for current week");
-				})
-
-		this.getEmployeeShifts($http, $q, weekNo, year)
 				.then((result) => {
 					var response = _.map(result, (i) => {
-					  var eo = {};
-					  for(var j=0; j<7; j++){
-					    var d = i["day"+j.toString()];
-					    var dname = _.findWhere(this.shifts, {id: d}).shiftname;
-					    eo["sday"+j.toString()] = dname;
-					  }
-					  return _.extend(i, eo);
+						var eo = {};
+						for(var j=0; j<7; j++){
+							var d = i["day"+j.toString()];
+							var dname = _.findWhere(this.shifts, {id: d}).shiftname;
+							eo["sday"+j.toString()] = dname;
+						}
+						return _.extend(i, eo);
 					});
 
 					console.log("response result: ", JSON.stringify(response));
@@ -55,7 +51,7 @@ export default class ShiftController {
 				})
 				.catch((error) => {
 					this.errors.push("no dates were registered for current week");
-				})
+				});
 	}
 
 	getShifts($http, $q){
@@ -78,8 +74,9 @@ export default class ShiftController {
 		return $q((resolve, reject) => {
 			svc.getEmployeeShifts(weekNo, year)
         .then((result) => {
-      		console.log("response2: ", JSON.stringify(result));
-					return resolve(result);
+					const newResponse = getImagePath(result);
+      		console.log("response2: ", JSON.stringify(newResponse));
+					return resolve(newResponse);
 				})
 				.catch((err) => {
 					console.log("response3: ", JSON.stringify(err));
@@ -87,4 +84,24 @@ export default class ShiftController {
 				});
 		})
 	}
+
+	showModal(id){
+		alert(id);
+		console.log("id: ", id);
+		BootstrapDialog.show({
+			title: 'Say-hello dialog',
+			message: 'Hi Apple!'
+		});
+	}
+}
+
+function getImagePath(shiftDetails){
+	const newShiftDetails = shiftDetails;
+	_.each(newShiftDetails, (shift) => {
+		var randomNum = Math.floor((Math.random() * 16) + 1) + 10;
+		let imagePath = "./../../contents/images/Avatars/" + randomNum.toString() + ".png";
+		_.extend(shift, {imgPath: imagePath});
+	});
+
+	return newShiftDetails;
 }

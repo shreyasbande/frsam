@@ -6,7 +6,8 @@ module.exports = {
     const query = squel.select({tableAliasQuoteCharacter: '', numberedParameters: true})
      .from("crosstab('"
          + squel.select({tableAliasQuoteCharacter: '', numberedParameters: true})
-                .field('u.id').field('u.username').field('d.syear').field('d.weekno').field('d.weekday').field('sd.shiftid')
+                .field('u.id').field('u.username').field('u.email').field('u.contact').field('u.employeeid')
+                .field('d.syear').field('d.weekno').field('d.weekday').field('sd.shiftid')
                 .from("transaction.shiftdetails", "sd")
                 .join("master.user", "u", "sd.userid = u.id")
                 .join("transaction.userstreams", "us", "us.userid = u.id")
@@ -21,7 +22,7 @@ module.exports = {
                 .from('master.dates')
                 .distinct()
                 .order('1')
-         + "') as ct(userid int, username text, year int, weekno int, day0 int, day1 int, day2 int, day3 int, day4 int, day5 int, day6 int)"
+         + "') as ct(userid int, username text, email text, contact text, employeeid text, year int, weekno int, day0 int, day1 int, day2 int, day3 int, day4 int, day5 int, day6 int)"
          )
      .field('*');
 

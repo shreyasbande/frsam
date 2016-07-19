@@ -1,0 +1,147 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="shreyas">
+
+    <title>SaM</title>
+
+    <script src="./contents/lib/angular.js"></script>
+    <script src="./contents/lib/angular-route.js"></script>
+    <script src="./app/app.js"></script>
+    <script src="./contents/lib/underscore.js"></script>
+    <script src="./contents/lib/moment.js"></script>
+    <script src="./contents/lib/angular-moment.js"></script>
+    <script src="./contents/lib/UnderscoreService.js"></script>
+
+    <!-- <script src="./app/shiftplan/shiftController.js"></script>
+    <script src="./app/shiftplan/shiftService.js"></script> -->
+
+    <link href="./contents/images/logo.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="./contents/css/bootstrap.css" rel="stylesheet">
+    <link href="./contents/css/fr.css" rel="stylesheet">
+    <link href="./contents/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body id="page-top" class="index" ng-app="sam">
+
+<header>
+    <div class="col-lg-12 text-center">
+        <div class="grid_12">
+            <div class="compNameContainer">
+                <div class="companyName">SaM</div>
+                <div class="companyCaption">harder you try.. the easier it gets</div>
+            </div>
+            <img src="contents/images/logo.ico"/>
+            <div class="clear"></div>
+        </div>
+    </div>
+</header>
+
+<section class="primary">
+    <div class="container" style="text-align: center;">
+        <div id="grid" class="grid">
+            <a href="./views/partials/_error.html">
+                <figure>
+                    <svg viewBox="0 0 180 320" preserveAspectRatio="none">
+                        <path d="M 180,160 0,262 0,0 180,0 z" />
+                    </svg>
+                    <figcaption>
+                        <div class="title">Info</div>
+                    </figcaption>
+                </figure>
+                <span><i class="fa fa-arrow-circle-right fa-4x"></i></span>
+            </a>
+            <a href="./views/shiftplan">
+                <figure>
+                    <svg viewBox="0 0 180 320" preserveAspectRatio="none">
+                        <path d="M 180,160 0,262 0,0 180,0 z" />
+                    </svg>
+                    <figcaption>
+                        <div class="title">Shift Plan</div>
+                    </figcaption>
+                </figure>
+                <span><i class="fa fa-arrow-circle-right fa-4x"></i></span>
+            </a>
+            <a href="./views/partials/_error.html" data-path-hover="m 180,70.57627 -180,0 L 0,0 180,0 z">
+                <figure>
+                    <svg viewBox="0 0 180 320" preserveAspectRatio="none">
+                        <path d="M 180,160 0,262 0,0 180,0 z" />
+                    </svg>
+                    <figcaption>
+                        <div class="title">KEDB</div>
+                    </figcaption>
+                </figure>
+                <span><i class="fa fa-arrow-circle-right fa-4x"></i></span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center">
+    <div class="footer-below">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    -- SBS &copy; 2016 --
+                    <br />
+                    Developed & Designed by <a href="http://www.shreyasbande89.wordpress.com" rel="nofollow">Shreyas Bande</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+
+<script src="./contents/lib/jquery.js"></script>
+<script src="./contents/lib/jquery.easing.min.js"></script>
+<script src="./contents/lib/bootstrap.min.js"></script>
+<script src="./contents/js/fr.js"></script>
+<script src="./contents/lib/snap.svg-min.js"></script>
+
+
+
+<script>
+    $(document).ready(function () {
+        $(".bt-menu-trigger").on('click', function() {
+            if ($('.bt-menu').hasClass('bt-menu-open')) {
+                $('.bt-menu').removeClass('bt-menu-open');
+            } else {
+                $('.bt-menu').addClass('bt-menu-open');
+            }
+        });
+    });
+    (function () {
+        function init() {
+            var speed = 250,
+                easing = mina.easeinout;
+
+            var pathHeights = {25: 70.57627, 50: 102, 75: 135, 100: 165};
+            [].slice.call(document.querySelectorAll('#grid > a')).forEach(function (el) {
+
+                var titleHeight = $(el.querySelector('div.title')).height();
+                var animatePathHeight = pathHeights[titleHeight];
+
+                el.setAttribute('data-path-hover', "m 180,"+ animatePathHeight +" -180,0 L 0,0 180,0 z");
+                var s = Snap(el.querySelector('svg')), path = s.select('path'),
+                    pathConfig = {
+                        from: path.attr('d'),
+                        to: el.getAttribute('data-path-hover')
+                    };
+                el.addEventListener('mouseenter', function () {
+                    path.animate({ 'path': pathConfig.to }, speed, easing);
+                });
+                el.addEventListener('mouseleave', function () {
+                    path.animate({ 'path': pathConfig.from }, speed, easing);
+                });
+            });
+        }
+        init();
+    })();
+</script>
+</body>
+</html>

@@ -19,6 +19,7 @@
     <link href="./../../contents/css/bootstrap.css" rel="stylesheet">
     <link href="./../../contents/css/fr.css" rel="stylesheet">
     <link href="./../../contents/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
 </head>
 <body ng-app="sam" class="index" style="padding: 20px;" ng-controller="shiftController as shiftCtrl">
 
@@ -37,28 +38,67 @@
    </tr>
    <tr ng-repeat="x in shiftCtrl.weeksShift">
      <td style="display: none">{{ x.userid }}</td>
-     <td style="color: #873600;">{{ x.username }}</td>
+     <td><a style="cursor:pointer" data-toggle="modal" data-target="#userModal" data-backdrop="static" data-keyboard="false" class="abc" data-user="{{x}}">{{ x.username }}</a></td>
      <td ng-repeat="th in shiftCtrl.days" style="color: #873600;">
           {{ x[th.id] }}
-         <!-- <select name="repeatSelect1" id="repeatSelect1" ng-model="">
-              <option ng-repeat="option in shiftCtrl.shifts" value="{{option.id}}">{{option.shiftname}}</option>
-            </select> -->
-
-            <!-- <select name="repeatSelect_{{th.id}}_{{x.userid}}" id="repeatSelect_{{th.id}}_{{x.userid}}"
-      ng-options="option.shiftname for option in shiftCtrl.shifts track by option.id"
-      ng-model="x[th.id]"></select> -->
-</div>
-<!-- <select name="repeatSelect" id="repeatSelect_{{th.id}}_{{x.userid}}" >
-              <option ng-repeat="option in shiftCtrl.shifts" value="{{option.id}}" ng-if="x[th.id] === option.id">
-                   {{option.shiftname}}
-              </option>
-            </select> -->
-<!--
-             <select name="mySelect" id="mySelect" ng-options="shift.shiftname for shift in shiftCtrl.shifts track by shift.id"
-             ng-model=""></select> -->
      </td>
    </tr>
  </table>
+ </div>
+
+<!-- <script>
+     function showModal(id){
+         //alert("asasas ");
+         console.log(id);
+     }
+ </script>-->
+
+ <!-- Modal -->
+ <div id="userModal" class="modal fade" role="dialog">
+     <div class="modal-dialog">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <!--<button type="button" class="close" data-dismiss="modal">&times;</button>-->
+                 <h4 class="modal-title" style="color:dodgerblue">User Info</h4>
+             </div>
+             <div class="modal-body" style="background-color: whitesmoke">
+                 <div class="row" style="text-align: left;">
+                     <div class="col-md-4">
+                         <div class="row" style="text-align: center; vertical-align: middle; padding: 10px;">
+                             <img id="userImg" style="height: 150px; width: 150px;border: 8px solid #EBEBEB; border-radius: 5px"/>
+                         </div>
+                         <br/>
+                     </div>
+                     <div class="col-md-8">
+                         <div class="row"><span class="col-md-4" style="color:dodgerblue;">Employee Id</span> <span class="col-md-8" style="color: black" id="userEmpId"></span></div>
+                         <div class="row"><hr/></div>
+                         <div class="row"><span class="col-md-4" style="color:dodgerblue;  ">Name</span> <span class="col-md-8" style="color: black" id="userName"></span></div>
+                         <div class="row"><hr/></div>
+                         <div class="row"><span class="col-md-4" style="color:dodgerblue;   ">Email Id</span> <span class="col-md-8" style="color: black" id="userEmail"></span></div>
+                         <div class="row"><hr/></div>
+                         <div class="row"><span class="col-md-4" style="color:dodgerblue;   ">Contact</span> <span class="col-md-8" style="color: black" id="userContact"></span></div>
+                     </div>
+                 </div>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+             </div>
+         </div>
+     </div>
+ </div>
+
+<script>
+
+    $(document).on("click", ".abc", function () {
+        var user = $(this).data('user');
+        $("#userImg").attr("src", user.imgPath);
+        $("#userEmpId").text(user.employeeid);
+        $("#userName").text(user.username);
+        $("#userEmail").text(user.email);
+        $("#userContact").text(user.contact);
+    });
+
+</script>
 
 </body>
 </html>
