@@ -1,0 +1,25 @@
+{
+  "name": "sam_services",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Shreyas Bande",
+  "license": "© shreyas",
+  "dependencies": {
+    "bluebird": "^3.4.1",
+    "body-parser": "1.15.0",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.14.1",
+    "node-config-manager": "^1.0.4",
+    "pg": "^6.0.2",
+    "pg-transaction": "^1.0.4",
+    "puid": "^1.0.5",
+    "restify": "^4.1.1",
+    "restify-router": "^0.2.1",
+    "squel": "^5.3.3",
+    "underscore": "^1.8.3"
+  }
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <title>SaM - Shift Plan</title>
+    <script src="./../../contents/lib/angular.js"></script>
+    <script src="./../../contents/lib/angular-route.js"></script>
+    <script src="./../../contents/lib/underscore.js"></script>
+    <script src="./../../contents/lib/moment.js"></script>
+    <script src="./../../contents/lib/angular-moment.js"></script>
+    <script src="./../../contents/lib/UnderscoreService.js"></script>
+    <script src="./../../contents/lib/jquery.js"></script>
+    <script src="./../../contents/lib/bootstrap.js"></script>
+
+    <script src="./../../app/app.js"></script>
+
+    <link href="./../../contents/images/logo.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="./../../contents/css/bootstrap.css" rel="stylesheet">
+    <link href="./../../contents/css/fr.css" rel="stylesheet">
+    <link href="./../../contents/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+<body ng-app="sam" class="index" style="padding: 20px;" ng-controller="shiftController as shiftCtrl">
+
+ <div ng-include="'./../views/partials/_header.html'" ng-init="vm='s'"></div>
+
+ <div style="text-align: center; color: #138D75;">
+   {{shiftCtrl.message}} <b>{{shiftCtrl.dateRange}}</b>
+ </div>
+ <br/>
+ <div class="table-responsive">
+  <table class="table table-striped">
+   <tr>
+     <th style="display:none;">userId</th>
+     <th style="color: #138D75;">User</th>
+     <th ng-repeat="th in shiftCtrl.days" style="color: #138D75;">{{th.date}}</th>
+   </tr>
+   <tr ng-repeat="x in shiftCtrl.weeksShift">
+     <td style="display: none">{{ x.userid }}</td>
+     <td style="color: #873600;">{{ x.username }}</td>
+     <td ng-repeat="th in shiftCtrl.days" style="color: #873600;">
+          {{ x[th.id] }}
+         <!-- <select name="repeatSelect1" id="repeatSelect1" ng-model="">
+              <option ng-repeat="option in shiftCtrl.shifts" value="{{option.id}}">{{option.shiftname}}</option>
+            </select> -->
+
+            <!-- <select name="repeatSelect_{{th.id}}_{{x.userid}}" id="repeatSelect_{{th.id}}_{{x.userid}}"
+      ng-options="option.shiftname for option in shiftCtrl.shifts track by option.id"
+      ng-model="x[th.id]"></select> -->
+</div>
+<!-- <select name="repeatSelect" id="repeatSelect_{{th.id}}_{{x.userid}}" >
+              <option ng-repeat="option in shiftCtrl.shifts" value="{{option.id}}" ng-if="x[th.id] === option.id">
+                   {{option.shiftname}}
+              </option>
+            </select> -->
+<!--
+             <select name="mySelect" id="mySelect" ng-options="shift.shiftname for shift in shiftCtrl.shifts track by shift.id"
+             ng-model=""></select> -->
+     </td>
+   </tr>
+ </table>
+
+</body>
+</html>

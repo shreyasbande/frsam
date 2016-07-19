@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <title>SaM - Info</title>
+    <script src="./../../contents/lib/angular.js"></script>
+    <script src="./../../contents/lib/angular-route.js"></script>
+    <script src="./../../contents/lib/underscore.js"></script>
+    <script src="./../../contents/lib/UnderscoreService.js"></script>
+    <script src="./../../contents/js/jquery.js"></script>
+    <script src="./../../contents/js/bootstrap.js"></script>
+
+    <script src="./../../app/app.js"></script>
+    <!--<script src="./../../app/info/InfoService.js"></script>-->
+    <script src="./../../app/info/infoController.js"></script>
+
+    <link href="./../../contents/images/logo.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="./../../contents/css/bootstrap.css" rel="stylesheet">
+    <link href="./../../contents/css/fr.css" rel="stylesheet">
+    <link href="./../../contents/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+<body ng-app="sam" class="index" style="padding: 20px;" ng-controller="infoController">
+
+<div ng-include="'./_header.html'" ng-init="vm='i'"></div>
+
+{{message}}
+
+</body>
+</html>
