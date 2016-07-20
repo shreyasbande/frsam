@@ -1,3 +1,12 @@
+/*import shiftService from './../services/shiftService.js';*/
+
+export default class InfoController {
+  constructor($http, $q) {
+    console.log("info controller: ");
+    this.message = "Hi";
+  }
+}
+
 //region Commented ES6 attempt
 /*class InfoController{
   constructor($scope){
@@ -12,6 +21,7 @@ angular.module('sam')
        .controller('infoController', ['$scope', '$http', '_', new InfoController($scope)]);*/
 //endregion
 
+/*
 angular.module('sam')
        .controller('infoController', ['$scope', '$http', '_', '$location', info])
        .service('infoService', ['$scope', '$http', '_', '$location', infoService]);
@@ -30,3 +40,4 @@ function infoService($scope, $http, _, $location){
 }
 
 
+*/

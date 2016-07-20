@@ -25,6 +25,11 @@
 
  <div ng-include="'./../views/partials/_header.html'" ng-init="vm='s'"></div>
 
+ <div class="container-fluid">
+     <div clas="row">
+         Shift wise details
+     </div>
+
  <div style="text-align: center; color: #138D75;">
    {{shiftCtrl.message}} <b>{{shiftCtrl.dateRange}}</b>
  </div>
@@ -46,14 +51,7 @@
  </table>
  </div>
 
-<!-- <script>
-     function showModal(id){
-         //alert("asasas ");
-         console.log(id);
-     }
- </script>-->
-
- <!-- Modal -->
+<!-- Modal -->
  <div id="userModal" class="modal fade" role="dialog">
      <div class="modal-dialog">
          <div class="modal-content">
@@ -85,6 +83,8 @@
              </div>
          </div>
      </div>
+ </div>
+
  </div>
 
 <script>
