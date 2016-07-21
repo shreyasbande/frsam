@@ -88,7 +88,7 @@
      </div>
  </div>
 
-     <div id="login" class="modal fade" role="dialog">
+     <div id="login" class="modal fade" role="dialog" ng-controller="loginController as loginCtrl">
          <div class="modal-dialog">
              <div class="modal-content">
                  <div class="modal-header">
@@ -99,8 +99,8 @@
                          <div class="loginTable">
                              <img src="./../../contents/images/Avatars/10.png" class="loginTopImage" alt="" />
                              <div class="SmallGap"></div>
-                             <div><input type="text" class = "loginBigTextBoxs" id="loginId" placeholder="login id"></div>
-                             <div><input type="password" class = "loginBigTextBoxs" id="password" placeholder="password"></div>
+                             <div><input type="text" class = "loginBigTextBoxs" ng-model="loginId" id="loginId" placeholder="login id"></div>
+                             <div><input type="password" class = "loginBigTextBoxs" ng-model="password1" id="password1" placeholder="password"></div>
                              <div class="SmallGap"></div>
                              <div class="LoginRow">
                                  <div class="LoginCol">
@@ -113,7 +113,7 @@
                      </div>
                  </div>
                  <div class="modal-footer">
-                     <button type="submit" class="btn btn-primary" onclick="checkLogin()">Login</button>
+                     <button type="submit" class="btn btn-primary" ng-click="loginCtrl.checkLogin(loginId,password1)">Login</button>
                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                  </div>
              </div>
