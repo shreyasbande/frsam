@@ -26,8 +26,12 @@
  <div ng-include="'./../views/partials/_header.html'" ng-init="vm='s'"></div>
 
  <div class="container-fluid">
-     <div clas="row">
-         Shift wise details
+     <div>
+         <div class="col-md-4"></div>
+         <div class="col-md-4"></div>
+         <div class="col-md-4">
+             <a style="cursor:pointer;" data-toggle="modal" data-target="#login" data-backdrop="static" data-keyboard="false">Edit Shift Plan</a>
+         </div>
      </div>
 
  <div style="text-align: center; color: #138D75;">
@@ -84,8 +88,37 @@
      </div>
  </div>
 
- </div>
-
+     <div id="login" class="modal fade" role="dialog">
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h4 class="modal-title" style="color:dodgerblue">Login</h4>
+                 </div>
+                 <div class="modal-body" >
+                     <div align="center">
+                         <div class="loginTable">
+                             <img src="./../../contents/images/Avatars/10.png" class="loginTopImage" alt="" />
+                             <div class="SmallGap"></div>
+                             <div><input type="text" class = "loginBigTextBoxs" id="loginId" placeholder="login id"></div>
+                             <div><input type="password" class = "loginBigTextBoxs" id="password" placeholder="password"></div>
+                             <div class="SmallGap"></div>
+                             <div class="LoginRow">
+                                 <div class="LoginCol">
+                                     <div class="errorText">
+                                         <span class="field-validation-error" id="ErrorListForLogin" style="display: none"></span>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="submit" class="btn btn-primary" onclick="checkLogin()">Login</button>
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                 </div>
+             </div>
+         </div>
+     </div>
 <script>
 
     $(document).on("click", ".abc", function () {

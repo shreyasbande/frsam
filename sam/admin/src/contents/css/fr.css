@@ -548,3 +548,39 @@ footer .footer-below {
 .scroll-top .btn:focus {
     outline: 0;
 }
+
+
+.SmallGap {
+    display: block;
+    height: 25px;
+}
+
+.loginTable {
+    text-align: center;
+    padding: 40px;
+    border: 1px solid silver;
+    border-radius: 4px;
+    -moz-box-shadow: 0 0 5px #888;
+    -webkit-box-shadow: 0 0 5px#888;
+    box-shadow: 0 0 5px #888;
+    width: 310px;
+    display: table;
+    background: #f8f8f8;
+}
+
+.loginTopImage {
+    width: 130px;
+    height: 130px;
+    border: 4px white solid;
+    border-radius: 50%;
+}
+
+.loginBigTextBoxs {
+    padding: 10px;
+    border: 1px solid silver;
+    border-collapse: collapse;
+    width: 250px;
+    line-height: 20px;
+    font: 300 15px 'Open Sans', sans-serif;
+    color: #697FED;
+}
