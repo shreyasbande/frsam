@@ -19,4 +19,10 @@ export default class constants{
       shiftMaster: "shiftMaster"
     }
   }
+
+  static info(){
+    return {
+      allUserInfo: "getAllUserInfo"
+    }
+  }
 }

@@ -1,0 +1,22 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <tr>
+                    <th style="color: #000; font-weight:normal;">Employee Id</th>
+                    <th style="color: #000; font-weight:normal;">Name</th>
+                    <th style="color: #000; font-weight:normal;">Email Id</th>
+                    <th style="color: #000; font-weight:normal;">Contact</th>
+                    <th style="color: #000; font-weight:normal;">Works In</th>
+                </tr>
+            <tr ng-repeat="u in infoController.userInfo">
+                    <td style="color: #C70039;">{{u.employeeid}}</td>
+                    <td style="color: #C70039;">{{u.username}}</td>
+                    <td style="color: #C70039;">{{u.email}}</td>
+                    <td style="color: #C70039;">{{u.contact}}</td>
+                    <td style="color: #C70039;">{{u.stream}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

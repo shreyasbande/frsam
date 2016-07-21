@@ -1,43 +1,32 @@
-/*import shiftService from './../services/shiftService.js';*/
+import infoService from './../services/infoService.js';
 
 export default class InfoController {
   constructor($http, $q) {
     console.log("info controller: ");
     this.message = "Hi";
+
+    this.errors = [];
+    this.getUserInfo($http, $q)
+        .then((result) => {
+          console.log("user info result: ", JSON.stringify(result));
+          this.userInfo = result;
+        })
+        .catch((error) => {
+          this.errors.push("no user details found");
+        });
+  }
+
+  getUserInfo($http, $q){
+    const svc = new infoService($http, $q);
+    return $q((resolve, reject) => {
+      svc.getAllUserInfo()
+         .then((result) => {
+           return resolve(result);
+         })
+         .catch((err) => {
+           console.log("response3: ", JSON.stringify(err));
+           return reject(err);
+         });
+    })
   }
 }
-
-//region Commented ES6 attempt
-/*class InfoController{
-  constructor($scope){
-    console.log("scope: ", this);
-    console.log("scope: ", $scope);
-    this.message = "Hi Hello !"
-  }
-}
-
-angular.module('sam')
-       /!*.service('mainService', new MainService())*!/
-       .controller('infoController', ['$scope', '$http', '_', new InfoController($scope)]);*/
-//endregion
-
-/*
-angular.module('sam')
-       .controller('infoController', ['$scope', '$http', '_', '$location', info])
-       .service('infoService', ['$scope', '$http', '_', '$location', infoService]);
-
-function info($scope, $http, _, $location) {
-  const a = "HI";
-  const b = $location;
-  const c = $location.search();
-  console.log("url: ", a);
-  $scope.message = "Hi Hello from info!";
-  $scope.viewMode = "info";
-}
-
-function infoService($scope, $http, _, $location){
-  return new InfoService($scope, $http, _, $location);
-}
-
-
-*/

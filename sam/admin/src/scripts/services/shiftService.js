@@ -18,7 +18,7 @@ export default class shiftService{
             return resolve(response);
           })
           .catch((err) => {
-            console.log("error occured - get shift master shiftService.js - line#21 ");
+            console.log("error occurred - get shift master shiftService.js - line#21 ");
             return reject(err);
           });
     })
