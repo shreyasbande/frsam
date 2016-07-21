@@ -3,7 +3,7 @@ import shiftService from './../services/shiftService.js';
 export default class ShiftController {
 	constructor($http, $q) {
 		console.log("person: ");
-    this.message = "Hi"
+    this.message = "Hi";
 
     const curr = new Date;
     const weekNo = moment(curr).week();
@@ -83,15 +83,6 @@ export default class ShiftController {
 					return reject(err);
 				});
 		})
-	}
-
-	showModal(id){
-		alert(id);
-		console.log("id: ", id);
-		BootstrapDialog.show({
-			title: 'Say-hello dialog',
-			message: 'Hi Apple!'
-		});
 	}
 }
 

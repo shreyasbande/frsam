@@ -39,7 +39,7 @@ export default class shiftService{
             return resolve(response);
           })
           .catch((err) => {
-            console.log("error occured - post employee shifts shiftService.js - line#26 ");
+            console.log("error occurred - post employee shifts shiftService.js - line#26 ");
             return reject(err);
           });
     })
