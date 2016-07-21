@@ -1,3 +1,3 @@
 module.exports = {
-  samDb: "postgres://postgres:12345@localhost:5432/sam"
+  samDb: "postgres://postgres:admin@m02b00011:5432/sam"
 };
