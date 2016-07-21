@@ -1,7 +1,7 @@
 import shiftController from './controller/shiftController.js';
 import infoController from './controller/infoController.js';
 
-var sam = angular.module('sam', ['underscore', 'ngRoute', 'angularMoment']);
+var sam = angular.module('sam', ['underscore', 'ngRoute', 'angularMoment','ngTable']);
 sam.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
   $locationProvider.html5Mode(true);
 }]);
@@ -9,6 +9,6 @@ sam.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 sam.controller('shiftController', shiftController);
 sam.controller('infoController', infoController);
 
-shiftController.$inject = ['$http', '$q'];
+shiftController.$inject = ['$http', '$q',"NgTableParams",'$filter','$timeout'];
 infoController.$inject  = ['$http', '$q'];
 
