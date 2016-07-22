@@ -17,7 +17,7 @@ export default class ShiftController {
 		this.http=$http;
 		this.q=$q;
 		this.NgTableParams=NgTableParams;
-		this.isEditable=true;
+		this.isEditable=false;
 
     this.message = "Hi";
 
