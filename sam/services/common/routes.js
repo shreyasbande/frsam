@@ -4,6 +4,7 @@ const routerInstance = new  Router();
 routerInstance.post('/getShifts', respondShiftPlan);
 routerInstance.get('/shiftMaster', respondShiftMaster);
 routerInstance.get('/getAllUserInfo', respondGetAllUserInfo);
+routerInstance.post('/getLoginInfo', respondGetLoginInfo);
 
 
 function respondShiftPlan(req, res, next){
@@ -21,6 +22,13 @@ function respondShiftMaster(req, res, next){
 function respondGetAllUserInfo(req, res, next){
   const infoController = include('api/info/controller.js');
   infoController.getAllUserInfo(req, res);
+  return next();
+}
+
+function respondGetLoginInfo(req, res, next){
+  console.log("here");
+  const loginController = include('api/login/controller.js');
+  loginController.validateLogin(req, res);
   return next();
 }
 

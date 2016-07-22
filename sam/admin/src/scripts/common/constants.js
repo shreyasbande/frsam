@@ -25,4 +25,9 @@ export default class constants{
       allUserInfo: "getAllUserInfo"
     }
   }
+  static login(){
+    return {
+      loginInfo: "getLoginInfo"
+    }
+  }
 }
