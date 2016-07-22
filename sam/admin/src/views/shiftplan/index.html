@@ -44,17 +44,24 @@
   <table id="shiftDetails" ng-table="shiftCtrl.tableParams" class="table table-condensed table-bordered table-striped" ng-controller="shiftController as shiftCtrl">
    <tr>
 
-     <th style="display:none;">userId</th>
+    <!-- <th style="display:none;">userId</th>-->
      <th style="color: #138D75;">User</th>
      <th ng-repeat="th in shiftCtrl.days" style="color: #138D75;">{{th.date}}</th>
 
    </tr>
    <tr ng-repeat="x in $data">
-     <td style="display: none">{{ x.userid }}</td>
+     <!--<td style="display: none">{{ x.userid }}</td>-->
      <td><a style="cursor:pointer" data-toggle="modal" data-target="#userModal" data-backdrop="static" data-keyboard="false" class="abc" data-user="{{x}}">{{ x.username }}</a></td>
-     <td ng-repeat="th in shiftCtrl.days" style="color: #873600;">
+     <td ng-show="!shiftCtrl.isEditable" ng-repeat="th in shiftCtrl.days" style="color: #873600;">
           {{ x[th.id] }}
      </td>
+       <td ng-show="shiftCtrl.isEditable" ng-repeat="th in shiftCtrl.days" style="color: #873600;">
+           <select >
+               <option selected> {{ x[th.id] }}</option>
+               <option ng-hide="x[th.id]==v.shiftname" ng-repeat="v in shiftCtrl.shifts">{{v.shiftname}}</option>
+           </select>
+       </td>
+
    </tr>
  </table>
  </div>

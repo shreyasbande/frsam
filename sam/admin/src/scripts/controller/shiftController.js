@@ -10,12 +10,13 @@ var nextMonday=0;
 var previousMonday=7;
 export default class ShiftController {
 
-	constructor($http, $q,NgTableParams,$filter, $timeout) {
+	constructor($http, $q,NgTableParams,$filter, ngTableDefaults) {
 		self=this;
 		this.filter=$filter;
 		this.http=$http;
 		this.q=$q;
 		this.NgTableParams=NgTableParams;
+		this.isEditable=true;
 
 		console.log("person: ");
     this.message = "Hi";
@@ -59,8 +60,6 @@ export default class ShiftController {
 					});
 
 					self.tableParams = new NgTableParams({
-						page: 1,            // show first page
-						count: response.length
 					},
 						{
 						getData: function() {
@@ -68,6 +67,7 @@ export default class ShiftController {
 						}
 					}
 					);
+					ngTableDefaults.settings.counts = [];
 					//this.tableParams = new NgTableParams({}, { dataset: response });
 					
 				})
@@ -105,7 +105,7 @@ export default class ShiftController {
 		})
 	}
 
-	
+
 	getNextShift() {
 		weekNumber+=1;
 		nextMonday+=7;
@@ -119,6 +119,7 @@ export default class ShiftController {
 				id: "sday" + (i-1).toString(),
 				date: moment(currentMonday).add(i+nextMonday, 'days').format("YYYY-MM-DD")
 			});
+
 		}
 		self.days = days;
 		this.errors = [];

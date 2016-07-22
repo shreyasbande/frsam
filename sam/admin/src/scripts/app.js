@@ -9,6 +9,6 @@ sam.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
 sam.controller('shiftController', shiftController);
 sam.controller('infoController', infoController);
 
-shiftController.$inject = ['$http', '$q',"NgTableParams",'$filter','$timeout'];
+shiftController.$inject = ['$http', '$q',"NgTableParams",'$filter','ngTableDefaults'];
 infoController.$inject  = ['$http', '$q'];
 
