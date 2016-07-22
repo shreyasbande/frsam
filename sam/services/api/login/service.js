@@ -11,36 +11,36 @@ class Info{
   }
 
 
-  validateUser(){
+  validateUser(data){
     const base = this;
+    var params=[];
     var response={
       "resTypeCode"    :'',
       "resTypeMessage" : ''
     }
     return new Promises((resolve, reject) => {
-      var user = 'Sujeet';
-      var password = 'password';
-      params.push(user,password);
-      const userDetailsQuery = queries.userDetails(params);
+      var user = data.loginId;
+      var password = data.psd;
+      const userDetailsQuery = queries.userDetails(user);
       console.log("userDetailsQuery " ,userDetailsQuery.value);
       base.db.fetch(userDetailsQuery, database.samDb)
         .then((userDetails) => {
           console.log("userDetails "+JSON.stringify(userDetails));
-          if(userDetails.username== user && userDetails.password==password){
-            if(userDetails.isadmin){
-             response.resTypeCode=200;
-             response.resTypeMessage='Success';
+          if(userDetails==null || userDetails[0].password!=password)
+          {
+            response.resTypeCode=200;
+            response.resTypeMessage='invalid user';
+          }
+          else{
+            if(userDetails[0].isadmin){
+              response.resTypeCode=200;
+              response.resTypeMessage='Success';
             }
-             else {
+            else {
               response.resTypeCode=200;
               response.resTypeMessage="no privileges";
             }
           }
-            else{
-            response.resTypeCode=200;
-            response.resTypeMessage='invalid user';
-          }
-
           resolve(response);
         })
         .catch((error) => {
