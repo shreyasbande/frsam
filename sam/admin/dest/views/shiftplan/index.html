@@ -12,14 +12,12 @@
     <script src="./../../contents/lib/UnderscoreService.js"></script>
     <script src="./../../contents/lib/jquery.js"></script>
     <script src="./../../contents/lib/bootstrap.js"></script>
-    <script src="./../../contents/lib/ng-table/dist/ng-table.js"></script>
+
     <script src="./../../app/app.js"></script>
 
     <link href="./../../contents/images/logo.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="./../../contents/css/bootstrap.css" rel="stylesheet">
-    <link href="./../../contents/css/ng-table.css" rel="stylesheet">
     <link href="./../../contents/css/fr.css" rel="stylesheet">
-    <link href="./../../contents/lib/ng-table/dist/ng-table.min.css" rel="stylesheet">
     <link href="./../../contents/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 </head>
@@ -28,28 +26,26 @@
  <div ng-include="'./../views/partials/_header.html'" ng-init="vm='s'"></div>
 
  <div class="container-fluid">
-     <div clas="row">
-         Shift wise details
+     <div>
+         <div class="col-md-4"></div>
+         <div class="col-md-4"></div>
+         <div class="col-md-4">
+             <a style="cursor:pointer;" data-toggle="modal" data-target="#login" data-backdrop="static" data-keyboard="false">Edit Shift Plan</a>
+         </div>
      </div>
 
  <div style="text-align: center; color: #138D75;">
    {{shiftCtrl.message}} <b>{{shiftCtrl.dateRange}}</b>
  </div>
-     <div class="">
-         <button ng-click="shiftCtrl.getPreviousShift()" id="Mybtn" class="btn btn-default">Previous</button>
-         <button ng-click="shiftCtrl.getNextShift()" class="btn btn-default pull-right">Next</button>
-     </div>
  <br/>
  <div class="table-responsive">
-  <table id="shiftDetails" ng-table="shiftCtrl.tableParams" class="table table-condensed table-bordered table-striped" ng-controller="shiftController as shiftCtrl">
+  <table class="table table-striped">
    <tr>
-
      <th style="display:none;">userId</th>
      <th style="color: #138D75;">User</th>
      <th ng-repeat="th in shiftCtrl.days" style="color: #138D75;">{{th.date}}</th>
-
    </tr>
-   <tr ng-repeat="x in $data">
+   <tr ng-repeat="x in shiftCtrl.weeksShift">
      <td style="display: none">{{ x.userid }}</td>
      <td><a style="cursor:pointer" data-toggle="modal" data-target="#userModal" data-backdrop="static" data-keyboard="false" class="abc" data-user="{{x}}">{{ x.username }}</a></td>
      <td ng-repeat="th in shiftCtrl.days" style="color: #873600;">
@@ -92,8 +88,37 @@
      </div>
  </div>
 
- </div>
-
+     <div id="login" class="modal fade" role="dialog" ng-controller="loginController as loginCtrl">
+         <div class="modal-dialog">
+             <div class="modal-content">
+                 <div class="modal-header">
+                     <h4 class="modal-title" style="color:dodgerblue">Login</h4>
+                 </div>
+                 <div class="modal-body" >
+                     <div align="center">
+                         <div class="loginTable">
+                             <img src="./../../contents/images/Avatars/10.png" class="loginTopImage" alt="" />
+                             <div class="SmallGap"></div>
+                             <div><input type="text" class = "loginBigTextBoxs" ng-model="loginId" id="loginId" placeholder="login id"></div>
+                             <div><input type="password" class = "loginBigTextBoxs" ng-model="password1" id="password1" placeholder="password"></div>
+                             <div class="SmallGap"></div>
+                             <div class="LoginRow">
+                                 <div class="LoginCol">
+                                     <div class="errorText">
+                                         <span class="field-validation-error" id="ErrorListForLogin" style="display: none"></span>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 <div class="modal-footer">
+                     <button type="submit" class="btn btn-primary" ng-click="loginCtrl.checkLogin(loginId,password1)">Login</button>
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                 </div>
+             </div>
+         </div>
+     </div>
 <script>
 
     $(document).on("click", ".abc", function () {

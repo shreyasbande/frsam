@@ -1,4 +1,5 @@
 import shiftService from './../services/shiftService.js';
+import loginService from './../services/loginService.js';
 
 var curr = new Date;
 var weekNumber = moment(curr).week();
@@ -16,15 +17,15 @@ export default class ShiftController {
 		this.http=$http;
 		this.q=$q;
 		this.NgTableParams=NgTableParams;
-		this.isEditable=true;
+		this.isEditable=false;
 
-		console.log("person: ");
     this.message = "Hi";
+
+
 		const curr = new Date;
     const weekNo = moment(curr).week();
     const year = moment(curr).year();
     const monday = moment(curr).startOf('week') + 1;
-    console.log("week#: ", weekNo, " year: ", year);
 
     this.message = "Shift Plan for ";
     this.dateRange = moment(monday).add(1, 'days').format("YYYY-MM-DD") + " to " +
@@ -45,7 +46,6 @@ export default class ShiftController {
 				.then((result) => {
 					this.shifts = result;
 					ShiftNames=this.shifts;
-					console.log("shift master: ", JSON.stringify(result));
 					return this.getEmployeeShifts($http, $q, weekNo, year);
 				})
 				.then((result) => {
