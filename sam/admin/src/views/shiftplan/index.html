@@ -12,12 +12,14 @@
     <script src="./../../contents/lib/UnderscoreService.js"></script>
     <script src="./../../contents/lib/jquery.js"></script>
     <script src="./../../contents/lib/bootstrap.js"></script>
-
+    <script src="./../../contents/lib/ng-table/dist/ng-table.js"></script>
     <script src="./../../app/app.js"></script>
 
     <link href="./../../contents/images/logo.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="./../../contents/css/bootstrap.css" rel="stylesheet">
+    <link href="./../../contents/css/ng-table.css" rel="stylesheet">
     <link href="./../../contents/css/fr.css" rel="stylesheet">
+    <link href="./../../contents/lib/ng-table/dist/ng-table.min.css" rel="stylesheet">
     <link href="./../../contents/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 </head>
@@ -37,20 +39,33 @@
  <div style="text-align: center; color: #138D75;">
    {{shiftCtrl.message}} <b>{{shiftCtrl.dateRange}}</b>
  </div>
+     <div class="">
+         <button ng-click="shiftCtrl.getPreviousShift()" id="Mybtn" class="btn btn-default">Previous</button>
+         <button ng-click="shiftCtrl.getNextShift()" class="btn btn-default pull-right">Next</button>
+     </div>
  <br/>
  <div class="table-responsive">
-  <table class="table table-striped">
+  <table id="shiftDetails" ng-table="shiftCtrl.tableParams" class="table table-condensed table-bordered table-striped" ng-controller="shiftController as shiftCtrl">
    <tr>
-     <th style="display:none;">userId</th>
+
+    <!-- <th style="display:none;">userId</th>-->
      <th style="color: #138D75;">User</th>
      <th ng-repeat="th in shiftCtrl.days" style="color: #138D75;">{{th.date}}</th>
+
    </tr>
-   <tr ng-repeat="x in shiftCtrl.weeksShift">
-     <td style="display: none">{{ x.userid }}</td>
+   <tr ng-repeat="x in $data">
+     <!--<td style="display: none">{{ x.userid }}</td>-->
      <td><a style="cursor:pointer" data-toggle="modal" data-target="#userModal" data-backdrop="static" data-keyboard="false" class="abc" data-user="{{x}}">{{ x.username }}</a></td>
-     <td ng-repeat="th in shiftCtrl.days" style="color: #873600;">
+     <td ng-show="!shiftCtrl.isEditable" ng-repeat="th in shiftCtrl.days" style="color: #873600;">
           {{ x[th.id] }}
      </td>
+       <td ng-show="shiftCtrl.isEditable" ng-repeat="th in shiftCtrl.days" style="color: #873600;">
+           <select >
+               <option selected> {{ x[th.id] }}</option>
+               <option ng-hide="x[th.id]==v.shiftname" ng-repeat="v in shiftCtrl.shifts">{{v.shiftname}}</option>
+           </select>
+       </td>
+
    </tr>
  </table>
  </div>
