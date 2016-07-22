@@ -12,7 +12,7 @@ function validateLogin(req, res) {
       res.send(userDetails);
     })
     .catch((error) => {
-      console.log("error occurred in controller - get shifts: ", error);
+      res.send(error);
     });
 }
 

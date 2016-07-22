@@ -1,7 +1,8 @@
-'use strict'
+'use strict';
 const dbAccess = include('common/dataAccess.js');
 const queries  = include('api/login/queries.js');
 const database = include('common/config.js');
+const Error =  include('exception/exception.js');
 
 class Info{
   constructor(id){
@@ -13,11 +14,10 @@ class Info{
 
   validateUser(data){
     const base = this;
-    var params=[];
     var response={
       "resTypeCode"    :'',
       "resTypeMessage" : ''
-    }
+    };
     return new Promises((resolve, reject) => {
       var user = data.loginId;
       var password = data.psd;
@@ -44,7 +44,7 @@ class Info{
           resolve(response);
         })
         .catch((error) => {
-          console.log("error in getting the shift details of the week ", error);
+          reject(error)
         });
     })
   }
