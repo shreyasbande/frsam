@@ -8,6 +8,7 @@ export default class loginService {
     this.promise   = $q;
     this.api       = new callApi($http, $q);
     this.constants = new constants();
+    this.reponse="";
   }
 
   getLoginData(loginId, password) {
@@ -23,6 +24,8 @@ export default class loginService {
       console.log(getLoginUrl)
       this.api.post(getLoginUrl, data)
         .then((response) => {
+          this.reponse=response;
+          console.log(response)
           return resolve(response);
         })
         .catch((err) => {

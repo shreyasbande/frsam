@@ -1,11 +1,13 @@
 import shiftService from './../services/shiftService.js';
+import loginService from './../services/loginService.js';
 
 export default class ShiftController {
 	constructor($http, $q) {
 		console.log("person: ");
     this.message = "Hi";
-
-    const curr = new Date;
+		loginService.response;
+		console.log(loginService.response);
+		const curr = new Date;
     const weekNo = moment(curr).week();
     const year = moment(curr).year();
 

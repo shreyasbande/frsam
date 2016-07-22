@@ -26,10 +26,10 @@ class Info{
       base.db.fetch(userDetailsQuery, database.samDb)
         .then((userDetails) => {
           console.log("userDetails "+JSON.stringify(userDetails));
-          if(userDetails==null || userDetails[0].password!=password)
+          if(userDetails.length==0 || userDetails[0].password!=password)
           {
             response.resTypeCode=200;
-            response.resTypeMessage='invalid user';
+            response.resTypeMessage='Invalid username or password';
           }
           else{
             if(userDetails[0].isadmin){
@@ -38,7 +38,7 @@ class Info{
             }
             else {
               response.resTypeCode=200;
-              response.resTypeMessage="no privileges";
+              response.resTypeMessage="No privilege to edit shifts";
             }
           }
           resolve(response);
