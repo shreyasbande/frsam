@@ -3,9 +3,11 @@ import shiftService from './../services/shiftService.js';
 var curr = new Date;
 var weekNumber = moment(curr).week();
 var currentYear = moment(curr).year();
-var currentMonday = moment(curr).startOf('week') + 1;
+var currentMonday = moment(curr).startOf('week') + 7;
 var self;
 var ShiftNames;
+var nextMonday=0;
+var previousMonday=7;
 export default class ShiftController {
 
 	constructor($http, $q,NgTableParams,$filter, $timeout) {
@@ -38,7 +40,6 @@ export default class ShiftController {
 		this.days = days;
 		this.errors = [];
 		this.a = 5;
-		console.log("days: ", JSON.stringify(days));
 		this.getShifts($http, $q)
 				.then((result) => {
 					this.shifts = result;
@@ -57,7 +58,6 @@ export default class ShiftController {
 						return _.extend(i, eo);
 					});
 
-					console.log("response result: ", JSON.stringify(response));
 					self.tableParams = new NgTableParams({
 						page: 1,            // show first page
 						count: response.length
@@ -83,11 +83,9 @@ export default class ShiftController {
 		return $q((resolve, reject) => {
 			svc.getShiftMaster()
         .then((result) => {
-      		console.log("response shift master: ", JSON.stringify(result));
 					return resolve(result);
 				})
 				.catch((err) => {
-					console.log("response err shift master: ", JSON.stringify(err));
 					return reject(err);
 				});
 		})
@@ -99,35 +97,32 @@ export default class ShiftController {
 			svc.getEmployeeShifts(weekNo, year)
         .then((result) => {
 					const newResponse = getImagePath(result);
-      		console.log("response2: ", JSON.stringify(newResponse));
 					return resolve(newResponse);
 				})
 				.catch((err) => {
-					console.log("response3: ", JSON.stringify(err));
 					return reject(err);
 				});
 		})
 	}
 
+	
 	getNextShift() {
 		weekNumber+=1;
+		nextMonday+=7;
 		var $http=this.http;
-
-		this.dateRange = moment(currentMonday).add(1, 'days').format("YYYY-MM-DD") + " to " +
-			moment(currentMonday).add(7, 'days').format("YYYY-MM-DD");
+		this.dateRange = moment(currentMonday).add(1+nextMonday, 'days').format("YYYY-MM-DD") + " to " +
+			moment(currentMonday).add(7+nextMonday, 'days').format("YYYY-MM-DD");
 
 		var days = [];
 		for (var i = 1; i < 8; i++) {
 			days.push({
 				id: "sday" + (i-1).toString(),
-				date: moment(currentMonday).add(i, 'days').format("YYYY-MM-DD")
+				date: moment(currentMonday).add(i+nextMonday, 'days').format("YYYY-MM-DD")
 			});
 		}
-
-		this.days = days;
+		self.days = days;
 		this.errors = [];
 		this.a = 5;
-		console.log("days: ", JSON.stringify(days));
 		this.getEmployeeShifts($http, this.q, weekNumber, currentYear)
 			.then((result) => {
 				var response = _.map(result, (i) => {
@@ -139,8 +134,6 @@ export default class ShiftController {
 					}
 					return _.extend(i, eo);
 				});
-				console.log("next response",response);
-				console.log("next response1",this.tableParams);
 				self.tableParams = {reload:function(){},settings:function(){return {}}};
 				self.tableParams =  this.NgTableParams({}, { getData: function () {
 					return response;
@@ -151,26 +144,23 @@ export default class ShiftController {
 			});
 	}
 
+
 	getPreviousShift() {
 		weekNumber-=1;
 		var $http=this.http;
-
-
-		this.dateRange = moment(currentMonday).add(1, 'days').format("YYYY-MM-DD") + " to " +
-			moment(currentMonday).add(7, 'days').format("YYYY-MM-DD");
-
+		this.dateRange = moment(currentMonday).add(1+nextMonday, 'days').subtract(previousMonday,'days').format("YYYY-MM-DD") + " to " +
+			moment(currentMonday).add(7+nextMonday, 'days').subtract(previousMonday,'days').format("YYYY-MM-DD");
 		var days = [];
 		for (var i = 1; i < 8; i++) {
 			days.push({
 				id: "sday" + (i-1).toString(),
-				date: moment(currentMonday).add(i, 'days').format("YYYY-MM-DD")
+				date: moment(currentMonday).add(i+nextMonday, 'days').subtract(previousMonday,'days').format("YYYY-MM-DD")
 			});
 		}
-
-		this.days = days;
+		nextMonday-=7;
+		self.days = days;
 		this.errors = [];
 		this.a = 5;
-		console.log("days: ", JSON.stringify(days));
 		this.getEmployeeShifts($http, this.q, weekNumber, currentYear)
 			.then((result) => {
 				var response = _.map(result, (i) => {
@@ -182,8 +172,6 @@ export default class ShiftController {
 					}
 					return _.extend(i, eo);
 				});
-				console.log("next response",response);
-				console.log("next response1",this.tableParams);
 				self.tableParams = {reload:function(){},settings:function(){return {}}};
 				self.tableParams =  this.NgTableParams({}, { getData: function () {
 					return response;
