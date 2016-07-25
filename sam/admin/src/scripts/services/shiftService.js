@@ -44,4 +44,19 @@ export default class shiftService{
           });
     })
   }
+
+  submitData(data){
+
+    return this.promise((resolve, reject) =>{
+      const shiftUpdateUrl = this.constants.baseUrl + constants.shift().update;
+      this.api.post(shiftUpdateUrl,data)
+        .then((response) => {
+          return resolve(response);
+        })
+        .catch((err) => {
+          console.log("error occurred - get shift master shiftService.js - line#21 ");
+          return reject(err);
+        });
+    })
+  }
 }

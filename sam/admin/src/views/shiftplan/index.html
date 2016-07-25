@@ -60,14 +60,16 @@
           {{ x[th.id] }}
      </td>
        <td ng-show="shiftCtrl.isEditable" ng-repeat="th in shiftCtrl.days" style="color: #873600;">
-           <select ng-model="selectedValue" ng-init="selectedValue=(x[th.id]==undefined||null)?'select':x[th.id]" ng-change="shiftCtrl.changeShift(selectedValue,x.username)">
-              <!-- <option selected> {{ x[th.id] }}</option>-->
-               <option  ng-hide="x[th.id]==v.shiftname"  value="{{v.shiftname}}"  ng-repeat="v in shiftCtrl.shifts">{{v.shiftname}}</option>
+           <select ng-model="selectedValue" ng-init="selectedValue=(x[th.id]==undefined||null)?'select':x[th.id]" ng-change="shiftCtrl.changeShift(selectedValue,x.employeeid,th.id)">
+               <option value="{{v.shiftname}}"  ng-repeat="v in shiftCtrl.shifts">{{v.shiftname}}</option>
            </select>
        </td>
 
    </tr>
  </table>
+     <div>
+         <button ng-show="shiftCtrl.isEditable" ng-click="shiftCtrl.submitData()" class="btn btn-default pull-right">Submit</button>
+         </div>
  </div>
 
 <!-- Modal -->
@@ -97,7 +99,7 @@
                  </div>
              </div>
              <div class="modal-footer">
-                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                 <button type="button " class="btn btn-default" data-dismiss="modal">Close</button>
              </div>
          </div>
      </div>

@@ -9,6 +9,7 @@ var self;
 var ShiftNames;
 var nextMonday=0;
 var previousMonday=7;
+var changedData={};
 export default class ShiftController {
 
 	constructor($http, $q,NgTableParams,$filter, ngTableDefaults) {
@@ -17,7 +18,7 @@ export default class ShiftController {
 		this.http=$http;
 		this.q=$q;
 		this.NgTableParams=NgTableParams;
-		this.isEditable=false;
+		this.isEditable=true;
 
     this.message = "Hi";
 		
@@ -45,6 +46,16 @@ export default class ShiftController {
 				.then((result) => {
 					this.shifts = result;
 					ShiftNames=this.shifts;
+					var select= {
+						abbr     : "select",
+						colorcode: null,
+						id       : null,
+						shiftfrom: "select",
+						shiftname: "select",
+						shiftto  : "select"
+					}
+					this.shifts.unshift(select)
+
 					return this.getEmployeeShifts($http, $q, weekNo, year);
 				})
 				.then((result) => {
@@ -134,7 +145,12 @@ export default class ShiftController {
 					var eo = {};
 					for(var j=0; j<7; j++){
 						var d = i["day"+j.toString()];
-						var dname = _.findWhere(this.shifts, {id: d}).shiftname;
+						if(_.findWhere(this.shifts, {id: d})!=undefined){
+							var dname = _.findWhere(this.shifts, {id: d}).shiftname;
+						}
+						else{
+							break;
+						}
 						eo["sday"+j.toString()] = dname;
 					}
 					return _.extend(i, eo);
@@ -172,7 +188,12 @@ export default class ShiftController {
 					var eo = {};
 					for(var j=0; j<7; j++){
 						var d = i["day"+j.toString()];
-						var dname = _.findWhere(this.shifts, {id: d}).shiftname;
+						if(_.findWhere(this.shifts, {id: d})!=undefined){
+							var dname = _.findWhere(this.shifts, {id: d}).shiftname;
+						}
+						else{
+							break;
+						}
 						eo["sday"+j.toString()] = dname;
 					}
 					return _.extend(i, eo);
@@ -187,9 +208,36 @@ export default class ShiftController {
 			});
 	}
 	
-	changeShift(value,name){
-		console.log(name)
-		self.changeValue=value;
+	changeShift(value,employeeid,date){
+		var a=_.filter(self.days,(day) => {
+			return day.id==date;
+		});
+
+		changedData[employeeid+a[0].date]={
+			"EmpId":employeeid,
+			"Shift":value,
+			"ShiftDate":a[0].date
+		};
+	}
+
+	submitData(){
+		if(changedData.length!=0){
+			var data=[];
+			_.each(changedData,(object)=>{
+				data.push(object)
+			})
+
+			const svc = new shiftService(this.http, this.q);
+			return this.q((resolve, reject) => {
+				svc.submitData(data)
+					.then((result) => {
+						return resolve(result);
+					})
+					.catch((err) => {
+						return reject(err);
+					});
+			})
+		}
 	}
 }
 

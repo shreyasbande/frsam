@@ -16,7 +16,8 @@ export default class constants{
   static shift(){
     return {
       getShifts: "getShifts",
-      shiftMaster: "shiftMaster"
+      shiftMaster: "shiftMaster",
+      update:"updateShift"
     }
   }
 

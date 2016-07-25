@@ -129,7 +129,7 @@ gulp.task('watch', function () {
   gulp.watch(src.js, ['js']);
   gulp.watch(src.fonts, ['fonts']);
   gulp.watch(src.html, ['html']);
-  gulp.watch(src.scripts.all, ['scripts']);
+  gulp.watch('src/scripts/**/*.js', ['scripts']);
 });
 
 gulp.task('build', ['scripts', 'html', 'lib', 'css', 'images', 'js', 'fonts']);
