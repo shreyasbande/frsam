@@ -60,9 +60,9 @@
           {{ x[th.id] }}
      </td>
        <td ng-show="shiftCtrl.isEditable" ng-repeat="th in shiftCtrl.days" style="color: #873600;">
-           <select >
-               <option selected> {{ x[th.id] }}</option>
-               <option ng-hide="x[th.id]==v.shiftname" ng-repeat="v in shiftCtrl.shifts">{{v.shiftname}}</option>
+           <select ng-model="selectedValue" ng-init="selectedValue=(x[th.id]==undefined||null)?'select':x[th.id]" ng-change="shiftCtrl.changeShift(selectedValue,x.username)">
+              <!-- <option selected> {{ x[th.id] }}</option>-->
+               <option  ng-hide="x[th.id]==v.shiftname"  value="{{v.shiftname}}"  ng-repeat="v in shiftCtrl.shifts">{{v.shiftname}}</option>
            </select>
        </td>
 

@@ -43,21 +43,26 @@ export default class ShiftController {
 		this.errors = [];
 		this.a      = 5;
 		this.getShifts($http, $q)
-			.then((result) => {
-				this.shifts = result;
-				ShiftNames  = this.shifts;
-				return this.getEmployeeShifts($http, $q, weekNo, year);
-			})
-			.then((result) => {
-				var response = _.map(result, (i) => {
-					var eo = {};
-					for (var j = 0; j < 7; j++) {
-						var d                     = i["day" + j.toString()];
-						var dname                 = _.findWhere(this.shifts, {id: d}).shiftname;
-						eo["sday" + j.toString()] = dname;
-					}
-					return _.extend(i, eo);
-				});
+				.then((result) => {
+					this.shifts = result;
+					ShiftNames=this.shifts;
+					return this.getEmployeeShifts($http, $q, weekNo, year);
+				})
+				.then((result) => {
+					var response = _.map(result, (i) => {
+						var eo = {};
+						for(var j=0; j<7; j++){
+							var d = i["day"+j.toString()];
+							if(_.findWhere(this.shifts, {id: d})!=undefined){
+								var dname = _.findWhere(this.shifts, {id: d}).shiftname;
+							}
+							else{
+								break;
+							}
+							eo["sday"+j.toString()] = dname;
+						}
+						return _.extend(i, eo);
+					});
 
 				self.tableParams                = new NgTableParams({},
 					{
@@ -204,6 +209,10 @@ export default class ShiftController {
 
 	}
 
+	changeShift(value,name){
+		console.log(name)
+		self.changeValue=value;
+	}
 }
 function getImagePath(shiftDetails){
 	const newShiftDetails = shiftDetails;
