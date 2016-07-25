@@ -5,11 +5,11 @@ export default class ShiftController {
 	constructor($http, $q) {
 		console.log("person: ");
     this.message = "Hi";
-		loginService.response;
-		console.log(loginService.response);
+		this.messageResponse="";
 		const curr = new Date;
     const weekNo = moment(curr).week();
     const year = moment(curr).year();
+		this.editable=false;
 
     const monday = moment(curr).startOf('week') + 1;
 
@@ -85,6 +85,13 @@ export default class ShiftController {
 					return reject(err);
 				});
 		})
+	}
+
+	 gotResponse(response){
+		if(response.resTypeMessage=="Success"){
+			this.editable=true;
+		}
+	console.log(this.editable);
 	}
 }
 
