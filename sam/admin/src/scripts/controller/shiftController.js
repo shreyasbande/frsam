@@ -20,8 +20,7 @@ export default class ShiftController {
 		this.isEditable=false;
 
     this.message = "Hi";
-
-
+		
 		const curr = new Date;
     const weekNo = moment(curr).week();
     const year = moment(curr).year();
@@ -53,7 +52,12 @@ export default class ShiftController {
 						var eo = {};
 						for(var j=0; j<7; j++){
 							var d = i["day"+j.toString()];
-							var dname = _.findWhere(this.shifts, {id: d}).shiftname;
+							if(_.findWhere(this.shifts, {id: d})!=undefined){
+								var dname = _.findWhere(this.shifts, {id: d}).shiftname;
+							}
+							else{
+								break;
+							}
 							eo["sday"+j.toString()] = dname;
 						}
 						return _.extend(i, eo);
@@ -181,6 +185,11 @@ export default class ShiftController {
 			.catch((error) => {
 				this.errors.push("no dates were registered for current week");
 			});
+	}
+	
+	changeShift(value,name){
+		console.log(name)
+		self.changeValue=value;
 	}
 }
 
