@@ -68,8 +68,10 @@
    </tr>
  </table>
      <div>
-         <button ng-show="shiftCtrl.isEditable" ng-click="shiftCtrl.submitData()" class="btn btn-default pull-right">Submit</button>
-         </div>
+         <button ng-show="shiftCtrl.isEditable" style="margin-left: 20px;" ng-click="shiftCtrl.submitData()" class="btn btn-default pull-right">Submit</button>
+
+         <button ng-show="shiftCtrl.isEditable" ng-click="shiftCtrl.isEditable=false;" class="btn btn-default pull-right">Cancel</button>
+     </div>
  </div>
 
 <!-- Modal -->
