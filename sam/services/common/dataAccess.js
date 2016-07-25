@@ -1,6 +1,7 @@
 'use strict';
 const pg             = require('pg');
 const transaction    = require('pg-transaction');
+const Error =  include('exception/exception.js');
 pg.defaults.poolSize = 50;
 
 /**
@@ -14,14 +15,14 @@ function fetchNoTranPromise(query, db, base) {
   return new Promises((resolve, reject) => {
     pg.connect(db, (err, client, done) => {
       if (err) {
+        var error = Error.dbConnectionError();
         done();
         //const error = errors.dbConnectionError(err.message);
         // console.log({
         //   base.logId,
         //   `P FNTP. Error while creating database connection ${query.key} >> ${query.value}, ${err.message}`
         // });
-        console.log("db err 1: ", JSON.stringify(err));
-        return reject(err);
+        return reject(error);
       }
 
       client.query(query.value.text, query.value.values,(err, result) => {
@@ -32,15 +33,15 @@ function fetchNoTranPromise(query, db, base) {
           //   logId: base.logId,
           //   msg  : `P FNTP. Error while fetching records for ${query.key} >> ${query.value}, ${err.message}`
           // });
-console.log("db err 2: ", JSON.stringify(err));
-          return reject(err);
+          var error = Error.queryError();
+          return reject(error);
         }
 
         // log.info({
         //   logId: base.logId,
         //   msg  : `P FNTP. ${query.key} >> ${query.value}. Result -- ${JSON.stringify(result.rows)}`
         // });
-//console.log("db response: ", JSON.stringify(result.rows));
+        //console.log("db response: ", JSON.stringify(result.rows));
         return resolve(result.rows);
       });
     });
@@ -63,6 +64,7 @@ function fetchTranPromise(base, query) {
         //   base.logId,
         //   `P FNTP. Error while fetching records for ${query.key} >> ${query.value}, ${err.message}`
         // });
+        var error = Error.queryError();
 
         return reject(error);
       }

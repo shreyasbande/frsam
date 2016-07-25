@@ -1,100 +1,210 @@
 import shiftService from './../services/shiftService.js';
 import loginService from './../services/loginService.js';
 
+var curr = new Date;
+var weekNumber = moment(curr).week();
+var currentYear = moment(curr).year();
+var currentMonday = moment(curr).startOf('week') + 7;
+var self;
+var ShiftNames;
+var nextMonday=0;
+var previousMonday=7;
 export default class ShiftController {
-	constructor($http, $q) {
-		console.log("person: ");
-    this.message = "Hi";
-		this.messageResponse="";
-		const curr = new Date;
-    const weekNo = moment(curr).week();
-    const year = moment(curr).year();
-		this.editable=false;
 
-    const monday = moment(curr).startOf('week') + 1;
+	constructor($http, $q, NgTableParams, $filter, ngTableDefaults) {
+		self               = this;
+		this.filter        = $filter;
+		this.http          = $http;
+		this.q             = $q;
+		this.NgTableParams = NgTableParams;
+		this.isEditable    = false;
 
-    console.log("week#: ", weekNo, " year: ", year);
+		this.message = "Hi";
 
-    this.message = "Shift Plan for ";
-    this.dateRange = moment(monday).add(1, 'days').format("YYYY-MM-DD") + " to " +
-      moment(monday).add(7, 'days').format("YYYY-MM-DD");
+		this.messageResponse = "";
+		const curr           = new Date;
+		const weekNo         = moment(curr).week();
+		const year           = moment(curr).year();
+		const monday         = moment(curr).startOf('week') + 1;
+
+		this.message   = "Shift Plan for ";
+		this.dateRange = moment(monday).add(1, 'days').format("YYYY-MM-DD") + " to " +
+			moment(monday).add(7, 'days').format("YYYY-MM-DD");
 
 		var days = [];
-	  for (var i = 1; i < 8; i++) {
-	    days.push({
-				id: "sday" + (i-1).toString(),
+		for (var i = 1; i < 8; i++) {
+			days.push({
+				id  : "sday" + (i - 1).toString(),
 				date: moment(monday).add(i, 'days').format("YYYY-MM-DD")
 			});
-	  }
+		}
 
-		this.days = days;
+		this.days   = days;
 		this.errors = [];
-		this.a = 5;
-		console.log("days: ", JSON.stringify(days));
+		this.a      = 5;
 		this.getShifts($http, $q)
-				.then((result) => {
-					this.shifts = result;
-					console.log("shift master: ", JSON.stringify(result));
-					return this.getEmployeeShifts($http, $q, weekNo, year);
-				})
-				.then((result) => {
-					var response = _.map(result, (i) => {
-						var eo = {};
-						for(var j=0; j<7; j++){
-							var d = i["day"+j.toString()];
-							var dname = _.findWhere(this.shifts, {id: d}).shiftname;
-							eo["sday"+j.toString()] = dname;
-						}
-						return _.extend(i, eo);
-					});
-
-					console.log("response result: ", JSON.stringify(response));
-					this.weeksShift = response;
-				})
-				.catch((error) => {
-					this.errors.push("no dates were registered for current week");
+			.then((result) => {
+				this.shifts = result;
+				ShiftNames  = this.shifts;
+				return this.getEmployeeShifts($http, $q, weekNo, year);
+			})
+			.then((result) => {
+				var response = _.map(result, (i) => {
+					var eo = {};
+					for (var j = 0; j < 7; j++) {
+						var d                     = i["day" + j.toString()];
+						var dname                 = _.findWhere(this.shifts, {id: d}).shiftname;
+						eo["sday" + j.toString()] = dname;
+					}
+					return _.extend(i, eo);
 				});
+
+				self.tableParams                = new NgTableParams({},
+					{
+						getData: function () {
+							return response;
+						}
+					}
+				);
+				ngTableDefaults.settings.counts = [];
+				//this.tableParams = new NgTableParams({}, { dataset: response });
+
+			})
+			.catch((error) => {
+				this.errors.push("no dates were registered for current week");
+			});
 	}
 
-	getShifts($http, $q){
+
+	getShifts($http, $q) {
 		const svc = new shiftService($http, $q);
 		return $q((resolve, reject) => {
 			svc.getShiftMaster()
-        .then((result) => {
-      		console.log("response shift master: ", JSON.stringify(result));
+				.then((result) => {
 					return resolve(result);
 				})
 				.catch((err) => {
-					console.log("response err shift master: ", JSON.stringify(err));
 					return reject(err);
 				});
 		})
 	}
 
-	getEmployeeShifts($http, $q, weekNo, year){
+	getEmployeeShifts($http, $q, weekNo, year) {
 		const svc = new shiftService($http, $q);
 		return $q((resolve, reject) => {
 			svc.getEmployeeShifts(weekNo, year)
-        .then((result) => {
+				.then((result) => {
 					const newResponse = getImagePath(result);
-      		console.log("response2: ", JSON.stringify(newResponse));
 					return resolve(newResponse);
 				})
 				.catch((err) => {
-					console.log("response3: ", JSON.stringify(err));
 					return reject(err);
 				});
 		})
 	}
 
-	 gotResponse(response){
-		if(response.resTypeMessage=="Success"){
-			this.editable=true;
-		}
-	console.log(this.editable);
-	}
-}
 
+	gotResponse(response) {
+		if (response.resTypeMessage == "Success") {
+			this.editable = true;
+		}
+		console.log(this.editable);
+
+	}
+
+	getNextShift() {
+		weekNumber += 1;
+		nextMonday += 7;
+		var $http      = this.http;
+		this.dateRange = moment(currentMonday).add(1 + nextMonday, 'days').format("YYYY-MM-DD") + " to " +
+			moment(currentMonday).add(7 + nextMonday, 'days').format("YYYY-MM-DD");
+
+		var days = [];
+		for (var i = 1; i < 8; i++) {
+			days.push({
+				id  : "sday" + (i - 1).toString(),
+				date: moment(currentMonday).add(i + nextMonday, 'days').format("YYYY-MM-DD")
+			});
+
+		}
+		self.days   = days;
+		this.errors = [];
+		this.a      = 5;
+		this.getEmployeeShifts($http, this.q, weekNumber, currentYear)
+			.then((result) => {
+				var response     = _.map(result, (i) => {
+					var eo = {};
+					for (var j = 0; j < 7; j++) {
+						var d                     = i["day" + j.toString()];
+						var dname                 = _.findWhere(this.shifts, {id: d}).shiftname;
+						eo["sday" + j.toString()] = dname;
+					}
+					return _.extend(i, eo);
+				});
+				self.tableParams = {
+					reload     : function () {
+					}, settings: function () {
+						return {}
+					}
+				};
+				self.tableParams = this.NgTableParams({}, {
+					getData: function () {
+						return response;
+					}
+				});
+			})
+			.catch((error) => {
+				this.errors.push("no dates were registered for current week");
+			});
+	}
+
+
+	getPreviousShift() {
+		weekNumber -= 1;
+		var $http      = this.http;
+		this.dateRange = moment(currentMonday).add(1 + nextMonday, 'days').subtract(previousMonday, 'days').format("YYYY-MM-DD") + " to " +
+			moment(currentMonday).add(7 + nextMonday, 'days').subtract(previousMonday, 'days').format("YYYY-MM-DD");
+		var days       = [];
+		for (var i = 1; i < 8; i++) {
+			days.push({
+				id  : "sday" + (i - 1).toString(),
+				date: moment(currentMonday).add(i + nextMonday, 'days').subtract(previousMonday, 'days').format("YYYY-MM-DD")
+			});
+		}
+		nextMonday -= 7;
+		self.days   = days;
+		this.errors = [];
+		this.a      = 5;
+		this.getEmployeeShifts($http, this.q, weekNumber, currentYear)
+			.then((result) => {
+				var response     = _.map(result, (i) => {
+					var eo = {};
+					for (var j = 0; j < 7; j++) {
+						var d                     = i["day" + j.toString()];
+						var dname                 = _.findWhere(this.shifts, {id: d}).shiftname;
+						eo["sday" + j.toString()] = dname;
+					}
+					return _.extend(i, eo);
+				});
+				self.tableParams = {
+					reload     : function () {
+					}, settings: function () {
+						return {}
+					}
+				};
+				self.tableParams = this.NgTableParams({}, {
+					getData: function () {
+						return response;
+					}
+				});
+			})
+			.catch((error) => {
+				this.errors.push("no dates were registered for current week");
+			});
+
+	}
+
+}
 function getImagePath(shiftDetails){
 	const newShiftDetails = shiftDetails;
 	_.each(newShiftDetails, (shift) => {
