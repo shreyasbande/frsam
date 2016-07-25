@@ -15,6 +15,7 @@
     <script src="./contents/lib/angular-moment.js"></script>
     <script src="./contents/lib/UnderscoreService.js"></script>
     <script src="./contents/lib/ng-table/dist/ng-table.js"></script>
+    <script src="./contents/lib/angular-cookies"></script>
     <script src="./app/app.js"></script>
 
 
@@ -80,9 +81,52 @@
                 </figure>
                 <span><i class="fa fa-arrow-circle-right fa-4x"></i></span>
             </a>
+            <a data-toggle="modal" data-target="#login" data-backdrop="static" data-keyboard="false" data-path-hover="m 180,70.57627 -180,0 L 0,0 180,0 z">
+                <figure>
+                    <svg viewBox="0 0 180 320" preserveAspectRatio="none">
+                        <path d="M 180,160 0,262 0,0 180,0 z" />
+                    </svg>
+                    <figcaption>
+                        <div class="title">Admin</div>
+                    </figcaption>
+                </figure>
+                <span><i class="fa fa-arrow-circle-right fa-4x"></i></span>
+            </a>
+        </div>
+    </div>
+    <div id="login" class="modal fade" id="modal" role="dialog" ng-controller="loginController as loginCtrl">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="color:dodgerblue">Login</h4>
+                </div>
+                <div class="modal-body" >
+                    <div align="center">
+                        <div class="loginTable">
+                            <img src="./../../contents/images/Avatars/10.png" class="loginTopImage" alt="" />
+                            <div class="SmallGap"></div>
+                            <div><input type="text" class = "loginBigTextBoxs" ng-model="loginId" id="loginId" placeholder="login id"></div>
+                            <div><input type="password" class = "loginBigTextBoxs" ng-model="password1" id="password1" placeholder="password"></div>
+                            <div class="SmallGap"></div>
+                            <div class="LoginRow">
+                                <div class="LoginCol">
+                                    <div class="errorText">
+                                        <span class="field-validation-error" id="ErrorListForLogin" style="display: none;color: red"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" ng-click="loginCtrl.checkLogin(loginId,password1)">Login</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
         </div>
     </div>
 </section>
+
 
 <!-- Footer -->
 <footer class="text-center">
@@ -98,6 +142,7 @@
         </div>
     </div>
 </footer>
+
 
 <!-- jQuery -->
 

@@ -1,9 +1,10 @@
 import loginService from './../services/loginService.js';
 
 export default class LoginController {
-  constructor($http, $q) {
+  constructor($http, $q,$cookies) {
     this.http=$http;
     this.q=$q;
+    this.cookies=$cookies;
   }
 
   checkLogin(Id, password) {
@@ -32,6 +33,7 @@ export default class LoginController {
             .then((result) => {
               if (result.resTypeMessage == "Success") {
                 $(".btn-default").click();
+                window.open("./views/admin/admin.html","_self");
               }
               else {
                 $("#ErrorListForLogin").text(result.resTypeMessage);
@@ -39,6 +41,7 @@ export default class LoginController {
               }
 
               console.log("response shift master: ", JSON.stringify(result));
+              this.cookies.put('token', result.resTypeMessage);
               return resolve(result);
             })
             .catch((err) => {

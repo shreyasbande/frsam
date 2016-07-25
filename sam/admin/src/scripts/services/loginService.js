@@ -26,9 +26,10 @@ export default class loginService {
       console.log(getLoginUrl)
       this.api.post(getLoginUrl, data)
         .then((response) => {
-          var a =new shiftController(this.http,this.promise);
-         a.gotResponse(response);
+         // var a =new shiftController(this.http,this.promise);
+       //  a.gotResponse(response);
           console.log(response)
+          this.setLoginData(response);
           return resolve(response);
         })
         .catch((err) => {
@@ -37,5 +38,9 @@ export default class loginService {
           return reject(err);
         });
     })
+  }
+
+  setLoginData(response){
+      this.data=response;
   }
 }

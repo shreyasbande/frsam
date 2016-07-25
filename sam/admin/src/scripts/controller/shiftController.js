@@ -111,9 +111,9 @@ export default class ShiftController {
 
 	gotResponse(response) {
 		if (response.resTypeMessage == "Success") {
-			this.editable = true;
+			this.isEditable    = true;
 		}
-		console.log(this.editable);
+		console.log(this.isEditable);
 
 	}
 
