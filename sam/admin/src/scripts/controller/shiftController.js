@@ -18,7 +18,7 @@ export default class ShiftController {
 		this.http=$http;
 		this.q=$q;
 		this.NgTableParams=NgTableParams;
-		this.isEditable=true;
+		this.isEditable=false;
 
     this.message = "Hi";
 		
@@ -53,8 +53,8 @@ export default class ShiftController {
 						shiftfrom: "select",
 						shiftname: "select",
 						shiftto  : "select"
-					}
-					this.shifts.unshift(select)
+					};
+					this.shifts.unshift(select);
 
 					return this.getEmployeeShifts($http, $q, weekNo, year);
 				})
@@ -79,11 +79,10 @@ export default class ShiftController {
 						{
 						getData: function() {
 							return response;
-						}
+						},
+							counts: []
 					}
 					);
-					ngTableDefaults.settings.counts = [];
-					//this.tableParams = new NgTableParams({}, { dataset: response });
 					
 				})
 				.catch((error) => {
