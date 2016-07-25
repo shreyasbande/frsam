@@ -157,7 +157,8 @@ export default class ShiftController {
 				self.tableParams = {reload:function(){},settings:function(){return {}}};
 				self.tableParams =  this.NgTableParams({}, { getData: function () {
 					return response;
-				} });
+				},
+					counts: []});
 			})
 			.catch((error) => {
 				this.errors.push("no dates were registered for current week");
@@ -200,7 +201,8 @@ export default class ShiftController {
 				self.tableParams = {reload:function(){},settings:function(){return {}}};
 				self.tableParams =  this.NgTableParams({}, { getData: function () {
 					return response;
-				} });
+				},
+					counts: []});
 			})
 			.catch((error) => {
 				this.errors.push("no dates were registered for current week");
