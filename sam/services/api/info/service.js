@@ -13,7 +13,6 @@ class Info{
     const base = this;
     return new Promises((resolve, reject) => {
       console.log("getting all users information ");
-
       const allUsersQuery = queries.getAllUsersQuery();
       base.db.fetch(allUsersQuery, database.samDb)
                 .then((userDetails) => {

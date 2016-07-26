@@ -1,12 +1,12 @@
 import infoService from './../services/infoService.js';
 
 export default class InfoController {
-  constructor($http, $q) {
+  constructor($http, $q,$cookies) {
     console.log("info controller: ");
     this.message = "Hi";
-
+    this.cookies=$cookies;
     this.errors = [];
-    this.getUserInfo($http, $q)
+    this.getUserInfo($http, $q,$cookies)
         .then((result) => {
           console.log("user info result: ", JSON.stringify(result));
           this.userInfo = result;
@@ -16,8 +16,8 @@ export default class InfoController {
         });
   }
 
-  getUserInfo($http, $q){
-    const svc = new infoService($http, $q);
+  getUserInfo($http, $q,$cookies){
+    const svc = new infoService($http, $q,$cookies);
     return $q((resolve, reject) => {
       svc.getAllUserInfo()
          .then((result) => {

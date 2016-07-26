@@ -27,21 +27,21 @@ export default class LoginController {
         $("#ErrorListForLogin").css('display', 'block');
       }
       else {
-        const svc = new loginService(this.http, this.q);
+        const svc = new loginService(this.http,this.q,this.cookies);
         return this.q((resolve, reject) => {
           svc.getLoginData(Id, password)
             .then((result) => {
               if (result.resTypeMessage == "Success") {
                 $(".btn-default").click();
-                window.open("./views/admin/admin.html","_self");
+                //window.open("./views/admin/admin.html","_self");
               }
               else {
                 $("#ErrorListForLogin").text(result.resTypeMessage);
                 $("#ErrorListForLogin").css('display', 'block');
               }
-
               console.log("response shift master: ", JSON.stringify(result));
-              this.cookies.put('token', result.resTypeMessage);
+              this.cookies.put('token', result.token);
+              console.log(this.cookies)
               return resolve(result);
             })
             .catch((err) => {

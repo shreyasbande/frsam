@@ -11,14 +11,15 @@ var nextMonday=0;
 var previousMonday=7;
 export default class ShiftController {
 
-	constructor($http, $q, NgTableParams, $filter, ngTableDefaults) {
+	constructor($http, $q, NgTableParams, $filter, ngTableDefaults,$cookies) {
 		self               = this;
 		this.filter        = $filter;
 		this.http          = $http;
 		this.q             = $q;
 		this.NgTableParams = NgTableParams;
 		this.isEditable    = false;
-
+		this.showEdit=true;
+		this.cookies=$cookies;
 		this.message = "Hi";
 
 		this.messageResponse = "";
@@ -39,14 +40,23 @@ export default class ShiftController {
 			});
 		}
 
+		if(this.cookies.get('token')){
+			var message=new loginService($http, $q,$cookies);
+			console.log("hello1",message);
+			var responseType=message.getResType();
+			console.log("hello",responseType);
+			if(responseType=="Success"){
+					this.showEdit=false;
+			}
+		}
 		this.days   = days;
 		this.errors = [];
 		this.a      = 5;
-		this.getShifts($http, $q)
+		this.getShifts($http, $q,$cookies)
 				.then((result) => {
 					this.shifts = result;
 					ShiftNames=this.shifts;
-					return this.getEmployeeShifts($http, $q, weekNo, year);
+					return this.getEmployeeShifts($http, $q, weekNo, year,$cookies);
 				})
 				.then((result) => {
 					var response = _.map(result, (i) => {
@@ -81,8 +91,9 @@ export default class ShiftController {
 	}
 
 
-	getShifts($http, $q) {
-		const svc = new shiftService($http, $q);
+	getShifts($http, $q,$cookies) {
+		const svc = new shiftService($http, $q,$cookies);
+		console.log(svc);
 		return $q((resolve, reject) => {
 			svc.getShiftMaster()
 				.then((result) => {
@@ -94,8 +105,8 @@ export default class ShiftController {
 		})
 	}
 
-	getEmployeeShifts($http, $q, weekNo, year) {
-		const svc = new shiftService($http, $q);
+	getEmployeeShifts($http, $q, weekNo, year,$cookies) {
+		const svc = new shiftService($http, $q,$cookies);
 		return $q((resolve, reject) => {
 			svc.getEmployeeShifts(weekNo, year)
 				.then((result) => {
@@ -106,15 +117,6 @@ export default class ShiftController {
 					return reject(err);
 				});
 		})
-	}
-
-
-	gotResponse(response) {
-		if (response.resTypeMessage == "Success") {
-			this.isEditable    = true;
-		}
-		console.log(this.isEditable);
-
 	}
 
 	getNextShift() {

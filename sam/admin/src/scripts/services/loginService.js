@@ -1,15 +1,17 @@
 import callApi from './../common/callApi.js';
 import constants from './../common/constants.js';
 import shiftController from './../controller/shiftController.js';
-
+var resType;
 export default class loginService {
-  constructor($http, $q) {
+  constructor($http, $q,$cookies) {
     console.log("into service constructor: ");
     this.http      = $http;
     this.promise   = $q;
-    this.api       = new callApi($http, $q);
+    this.api       = new callApi($http, $q,$cookies);
     this.constants = new constants();
-
+    this.data=null;
+    this.cookies=$cookies;
+    console.log($cookies);
   }
 
   getLoginData(loginId, password) {
@@ -40,7 +42,43 @@ export default class loginService {
     })
   }
 
+   urlBase64Decode(str) {
+    var output = str.replace('-', '+').replace('_', '/');
+    switch (output.length % 4) {
+      case 0:
+        break;
+      case 2:
+        output += '==';
+        break;
+      case 3:
+        output += '=';
+        break;
+      default:
+        throw 'Illegal base64url string!';
+    }
+    return window.atob(output);
+  }
+
   setLoginData(response){
       this.data=response;
+      console.log(this.data)
+  }
+
+  getData(){
+    var token = this.cookies.get('token')
+    var user  = {};
+    if (typeof token !== 'undefined') {
+      var encoded = token.split('.')[1];
+      resType        = JSON.parse(this.urlBase64Decode(encoded));
+      console.log(resType)
+    }
+    return resType;
+  }
+
+  getResType(){
+    var permissionList = (this.getData().resTypeMessage);
+    console.log(permissionList)
+    return permissionList;
+
   }
 }
