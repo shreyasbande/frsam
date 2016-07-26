@@ -137,7 +137,7 @@ export default class ShiftController {
 		self.days   = days;
 		this.errors = [];
 		this.a      = 5;
-		this.getEmployeeShifts($http, this.q, weekNumber, currentYear)
+		this.getEmployeeShifts($http, this.q, weekNumber, currentYear,this.cookies)
 			.then((result) => {
 				var response     = _.map(result, (i) => {
 					var eo = {};
@@ -182,7 +182,7 @@ export default class ShiftController {
 		self.days   = days;
 		this.errors = [];
 		this.a      = 5;
-		this.getEmployeeShifts($http, this.q, weekNumber, currentYear)
+		this.getEmployeeShifts($http, this.q, weekNumber, currentYear,this.cookies)
 			.then((result) => {
 				var response     = _.map(result, (i) => {
 					var eo = {};

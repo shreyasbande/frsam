@@ -14,5 +14,5 @@ sam.controller('loginController', loginController);
 
 shiftController.$inject = ['$http', '$q',"NgTableParams",'$filter','ngTableDefaults','$cookies'];
 infoController.$inject  = ['$http', '$q','$cookies'];
-loginController.$inject  = ['$http', '$q','$cookies'];
+loginController.$inject  = ['$http', '$q','$cookies','$location'];
 

@@ -3,16 +3,15 @@
 <head>
     <base href="/">
     <meta charset="UTF-8">
-    <title>SaM - KEDB</title>
+    <title>SaM - Admin</title>
     <script src="./../../contents/lib/angular.js"></script>
     <script src="./../../contents/lib/angular-route.js"></script>
     <script src="./../../contents/lib/underscore.js"></script>
     <script src="./../../contents/lib/UnderscoreService.js"></script>
-    <script src="./../../contents/js/jquery.js"></script>
-    <script src="./../../contents/js/bootstrap.js"></script>
+    <script src="./../../contents/lib/jquery.js"></script>
+    <script src="./../../contents/lib/bootstrap.js"></script>
     <script src="./../../contents/lib/ng-table/dist/ng-table.js"></script>
     <script src="./../../app/app.js"></script>
-    <script src="./../../app/kedb/kController.js"></script>
     <script src="./../../contents/lib/angular-cookies"></script>
 
     <link href="./../../contents/images/logo.ico" rel="shortcut icon" type="image/x-icon" />
@@ -21,11 +20,11 @@
     <link href="./../../contents/lib/ng-table/dist/ng-table.min.css" rel="stylesheet">
     <link href="./../../contents/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
-<body ng-app="sam" class="index" style="padding: 20px;" ng-controller="kController">
+<body  class="index" style="padding: 20px;" ng-controller="loginController as loginCtrl">
 
-<div ng-include="'./_header.html'" ></div>
+<div ng-include="'./../views/partials/_header.html'" ng-init="vm='a'"></div>
 
-kedb
+{{loginCtrl.message}}
 
 </body>
 </html>
