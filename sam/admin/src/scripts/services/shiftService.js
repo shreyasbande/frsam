@@ -2,17 +2,18 @@ import callApi from './../common/callApi.js';
 import constants from './../common/constants.js';
 
 export default class shiftService{
-  constructor($http, $q){
+  constructor($http, $q,$cookies){
     console.log("into service constructor: ");
     this.http = $http;
     this.promise = $q;
-    this.api = new callApi($http, $q);
+    this.api = new callApi($http, $q,$cookies);
     this.constants = new constants();
   }
 
   getShiftMaster(){
     return this.promise((resolve, reject) =>{
       const shiftMasterUrl = this.constants.baseUrl + constants.shift().shiftMaster;
+      console.log(shiftMasterUrl);
       this.api.get(shiftMasterUrl)
           .then((response) => {
             return resolve(response);

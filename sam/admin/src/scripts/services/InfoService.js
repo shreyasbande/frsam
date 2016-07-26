@@ -2,12 +2,13 @@ import callApi from './../common/callApi.js';
 import constants from './../common/constants.js';
 
 export default class infoService{
-  constructor($http, $q){
+  constructor($http, $q,$cookies){
     console.log("into info service constructor: ");
     this.http = $http;
     this.promise = $q;
-    this.api = new callApi($http, $q);
+    this.api = new callApi($http, $q,$cookies);
     this.constants = new constants();
+    this.cookies=$cookies;
   }
 
   getAllUserInfo(){

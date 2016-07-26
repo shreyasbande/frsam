@@ -2,6 +2,7 @@ const base_dir = __dirname + '/../';
 
 global._        = require('underscore');
 global.Promises = require('bluebird');
+global.jwt = require('jsonwebtoken');
 
 /**
  * include      - get the relative path for the required modules.
