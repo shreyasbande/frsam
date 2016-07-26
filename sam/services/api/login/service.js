@@ -27,7 +27,7 @@ class Info {
       base.db.fetch(userDetailsQuery, database.samDb)
         .then((userDetails) => {
           console.log("userDetails " + JSON.stringify(userDetails));
-          if (userDetails.length == 0 || userDetails[0].password != password) {
+          if (userDetails.length == 0 || userDetails[0].passwordkey != password) {
             response.resTypeCode    = 200;
             response.resTypeMessage = 'Invalid username or password';
           }
