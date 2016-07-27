@@ -65,7 +65,7 @@
                 <td ng-show="shiftCtrl.isEditable" ng-repeat="th in shiftCtrl.days" style="color: #873600;">
                     <select ng-model="selectedValue"
                             ng-init="selectedValue=(x[th.id]==undefined||null)?'select':x[th.id]"
-                            ng-change="shiftCtrl.changeShift(selectedValue,x.employeeid,th.id)">
+                            ng-change="shiftCtrl.changeShift(selectedValue,x.userid,th.id)">
                         <option value="{{v.shiftname}}" ng-repeat="v in shiftCtrl.shifts">{{v.shiftname}}</option>
                     </select>
                 </td>
