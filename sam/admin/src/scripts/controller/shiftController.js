@@ -232,17 +232,65 @@ export default class ShiftController {
 				data.push(object)
 			})
 
-			const svc = new shiftService(this.http, this.q);
-			return this.q((resolve, reject) => {
-				svc.submitData(data)
-					.then((result) => {
-						return resolve(result);
-					})
-					.catch((err) => {
-						return reject(err);
-					});
-			})
+			this.updateShift(data)
+				.then((result) => {
+				if(result.updateDone){
+					this.dateRange = moment(currentMonday).add(1+nextMonday, 'days').format("YYYY-MM-DD") + " to " +
+						moment(currentMonday).add(7+nextMonday, 'days').format("YYYY-MM-DD");
+
+					var days = [];
+					for (var i = 1; i < 8; i++) {
+						days.push({
+							id: "sday" + (i-1).toString(),
+							date: moment(currentMonday).add(i+nextMonday, 'days').format("YYYY-MM-DD")
+						});
+
+					}
+					self.days = days;
+					this.errors = [];
+					this.a = 5;
+					this.getEmployeeShifts(this.http, this.q, weekNumber, currentYear)
+						.then((result) => {
+							var response = _.map(result, (i) => {
+								var eo = {};
+								for(var j=0; j<7; j++){
+									var d = i["day"+j.toString()];
+									if(_.findWhere(this.shifts, {id: d})!=undefined){
+										var dname = _.findWhere(this.shifts, {id: d}).shiftname;
+									}
+									else{
+										break;
+									}
+									eo["sday"+j.toString()] = dname;
+								}
+								return _.extend(i, eo);
+							});
+							self.tableParams = {reload:function(){},settings:function(){return {}}};
+							self.tableParams =  this.NgTableParams({}, { getData: function () {
+								return response;
+							},
+								counts: []});
+							this.isEditable=false;
+						})
+						.catch((error) => {
+							this.errors.push("no dates were registered for current week");
+						});
+				}
+				})
 		}
+	}
+
+	updateShift(data){
+		const svc = new shiftService(this.http, this.q);
+		return this.q((resolve, reject) => {
+			svc.submitData(data)
+				.then((result) => {
+					return resolve(result);
+				})
+				.catch((err) => {
+					return reject(err);
+				});
+		})
 	}
 }
 
