@@ -26,26 +26,27 @@ class shiftData{
         .then((reult) => {
           base.data.map(function (rowToBeUpdated) {
             var model = {
-              "empId"    : rowToBeUpdated.EmpId,
+              "empId"    : rowToBeUpdated.userId,
               "shift"    : rowToBeUpdated.Shift,
               "shiftDate": rowToBeUpdated.ShiftDate
             };
 
-            console.log("updateQuery111");
             const updateQuery = queries.updateShiftData([model.empId, model.shift, model.shiftDate]);
-            console.log("updateQuery", updateQuery);
             obj.executeQuery(updateQuery)
               .then((result) => {
-                console.log("result", result);
                 rowProcessed++;
                 if (rowProcessed == base.data.length) {
                   base.response.updateDone = true;
-                  resolve(base.response);
+                  obj.commitTransaction()
+                    .then(function(result){
+                      resolve(base.response);
+                    })
                 }
               })
               .catch((error) => {
                 reject(error);
               });
+
           });
 
     })

@@ -136,6 +136,7 @@ function executeQueryPromise(base, query) {
       // });
       // for success code.
       return resolve(0);
+      base.txn.close()
     });
   });
 }
