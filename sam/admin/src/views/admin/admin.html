@@ -3,16 +3,18 @@
 <head>
     <base href="/">
     <meta charset="UTF-8">
-    <title>SaM - Admin</title>
+    <title>SaM - Info</title>
     <script src="./../../contents/lib/angular.js"></script>
     <script src="./../../contents/lib/angular-route.js"></script>
     <script src="./../../contents/lib/underscore.js"></script>
+    <script src="./../../contents/lib/moment.js"></script>
+    <script src="./../../contents/lib/angular-moment.js"></script>
     <script src="./../../contents/lib/UnderscoreService.js"></script>
     <script src="./../../contents/lib/jquery.js"></script>
     <script src="./../../contents/lib/bootstrap.js"></script>
     <script src="./../../contents/lib/ng-table/dist/ng-table.js"></script>
-    <script src="./../../app/app.js"></script>
     <script src="./../../contents/lib/angular-cookies"></script>
+    <script src="./../../app/app.js"></script>
 
     <link href="./../../contents/images/logo.ico" rel="shortcut icon" type="image/x-icon" />
     <link href="./../../contents/css/bootstrap.css" rel="stylesheet">
@@ -20,11 +22,15 @@
     <link href="./../../contents/lib/ng-table/dist/ng-table.min.css" rel="stylesheet">
     <link href="./../../contents/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
-<body  class="index" style="padding: 20px;" ng-controller="loginController as loginCtrl">
+<body ng-app="sam" class="index" style="padding: 20px;">
 
-<div ng-include="'./../views/partials/_header.html'" ng-init="vm='a'"></div>
+<div ng-include="'./../views/partials/_header.html'"></div>
 
-{{loginCtrl.message}}
-
+<div class="container-fluid">
+    <div class="row">
+        Login Successfull!!!!
+        <hr/>
+    </div>
+</div>
 </body>
 </html>

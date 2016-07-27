@@ -6,7 +6,7 @@ export default class LoginController {
     this.q=$q;
     this.cookies=$cookies;
     this.message="";
-    this.location=$location;
+    //this.location=$location;
   }
 
   checkLogin(Id, password) {
@@ -36,7 +36,8 @@ export default class LoginController {
               if (result.resTypeMessage == "Success") {
                 this.message=result.resTypeMessage;
                 $(".btn-default").click();
-               // this.location.path("./views/admin");
+                //this.location.path("./views/admin");
+                window.open("./views/admin/admin.html","_self");
               }
               else {
                 $("#ErrorListForLogin").text(result.resTypeMessage);
