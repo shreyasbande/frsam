@@ -5,6 +5,7 @@ routerInstance.post('/getShifts', respondShiftPlan);
 routerInstance.get('/shiftMaster', respondShiftMaster);
 routerInstance.get('/getAllUserInfo', respondGetAllUserInfo);
 routerInstance.post('/getLoginInfo', respondGetLoginInfo);
+routerInstance.post('/updateShift', updateShiftInfo);
 
 
 function respondShiftPlan(req, res, next){
@@ -26,9 +27,15 @@ function respondGetAllUserInfo(req, res, next){
 }
 
 function respondGetLoginInfo(req, res, next){
-  console.log("here");
   const loginController = include('api/login/controller.js');
   loginController.validateLogin(req, res);
+  return next();
+}
+
+function updateShiftInfo(req, res, next){
+  console.log("hii");
+  const updateShiftController = include('api/updateShift/controller.js');
+  updateShiftController.updateShiftInfo(req, res);
   return next();
 }
 

@@ -15,6 +15,7 @@ function fetchNoTranPromise(query, db, base) {
   return new Promises((resolve, reject) => {
     pg.connect(db, (err, client, done) => {
       if (err) {
+
         var error = Error.dbConnectionError();
         done();
         //const error = errors.dbConnectionError(err.message);
@@ -108,7 +109,6 @@ function createTranPromise(base, db) {
       //   logId: base.logId,
       //   msg  : `P CTP. Transaction created and started successfully. ${db} >> ${txn}`
       // });
-
       return resolve(true);
     });
   });
@@ -124,18 +124,10 @@ function executeQueryPromise(base, query) {
   return new Promises((resolve, reject) => {
     console.log("newQuery is "  +JSON.stringify(query));
 
-    base.txn.query(query.value.text, query.value.values, (err, result) => {
+    base.txn.query(query, (err, result) => {
       if (err) {
         base.txn.rollback();
-        //base.done();
-        //const error = errors.dbConnectionError(err.message);
-
-        // console.log({
-        //   logId: base.logId,
-        //   msg  : `P EQP. Error while creating database connection ${err.message}`
-        // });
-
-        return reject(error);
+        return reject(err);
       }
 
       // log.info({
