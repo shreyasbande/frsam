@@ -22,13 +22,43 @@
     <link href="./../../contents/lib/ng-table/dist/ng-table.min.css" rel="stylesheet">
     <link href="./../../contents/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 </head>
-<body ng-app="sam" class="index" style="padding: 20px;">
+<body ng-app="sam" class="index" style="padding: 20px;" ng-controller="loginController as loginCtrl">
 
-<div ng-include="'./../views/partials/_header.html'"></div>
-
+<div ng-include="'./../views/partials/_header.html'" ng-init="vm='a'"></div>
+<div id="successLogin" ng-hide="loginCtrl.loginMsg">Login Successfull!{{loginCtrl.message}}</div>
+    <!--<a style="cursor:pointer;margin-left: 1010px" data-toggle="modal" ng-click="loginCtrl.logout()" >Logout</a>-->
 <div class="container-fluid">
     <div class="row">
-        Login Successfull!!!!
+        <div id="login" ng-hide="loginCtrl.loginBox">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="color:dodgerblue">Login</h4>
+                    </div>
+                    <div class="modal-body" >
+                        <div align="center">
+                            <div class="loginTable">
+                                <img src="./../../contents/images/Avatars/10.png" class="loginTopImage" alt="" />
+                                <div class="SmallGap"></div>
+                                <div><input type="text" class = "loginBigTextBoxs" ng-model="loginId" id="loginId" placeholder="login id"></div>
+                                <div><input type="password" class = "loginBigTextBoxs" ng-model="password1" id="password1" placeholder="password"></div>
+                                <div class="SmallGap"></div>
+                                <div class="LoginRow">
+                                    <div class="LoginCol">
+                                        <div class="errorText">
+                                            <span class="field-validation-error" id="ErrorListForLogin" style="display: none;color: red"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" ng-click="loginCtrl.checkLogin(loginId,password1)">Login</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <hr/>
     </div>
 </div>

@@ -6,6 +6,22 @@ export default class LoginController {
     this.q=$q;
     this.cookies=$cookies;
     this.message="";
+    this.loginHide=true;
+    this.loginBox=false;
+    this.loginMsg=true;
+
+    if(this.cookies.get('token')){
+      var message=new loginService($http, $q,$cookies);
+      var responseType=message.getResType();
+      if (responseType!="Invalid username or password") {
+        this.message=responseType;
+        //document.getElementById("login").style.visibility = "hidden";
+        //document.getElementById("successLogin").style.display = "block";
+        this.loginHide=false;
+        this.loginBox=true;
+        this.loginMsg=false;
+      }
+    }
     //this.location=$location;
   }
 
@@ -33,11 +49,17 @@ export default class LoginController {
         return this.q((resolve, reject) => {
           svc.getLoginData(Id, password)
             .then((result) => {
-              if (result.resTypeMessage == "Success") {
+              if (result.resTypeMessage!="Invalid username or password") {
                 this.message=result.resTypeMessage;
-                $(".btn-default").click();
+                //document.getElementById("login").style.visibility = "hidden";
+                //document.getElementById("successLogin").style.display = "block";
+                this.loginHide=false;
+                this.loginBox=true;
+                this.loginMsg=false;
+                console.log(this.loginHide)
+                //$(".btn-default").click();
                 //this.location.path("./views/admin");
-                window.open("./views/admin/admin.html","_self");
+               // window.open("./views/admin/admin.html","_self");
               }
               else {
                 $("#ErrorListForLogin").text(result.resTypeMessage);
@@ -55,5 +77,10 @@ export default class LoginController {
         })
       }
     }
+  }
+  logout(){
+    console.log("logout")
+    this.cookies.remove("token");
+    window.open("/","_self");
   }
 }
