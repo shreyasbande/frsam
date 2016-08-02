@@ -160,6 +160,7 @@ export default class ShiftController {
 
 
 	getNextShift() {
+		self.isEditable=false;
 		weekNumber+=1;
 		nextMonday+=7;
 		var $http=this.http;
@@ -199,6 +200,7 @@ export default class ShiftController {
 
 
 	getPreviousShift() {
+		self.isEditable=false;
 		weekNumber-=1;
 		var $http=this.http;
 		this.dateRange = moment(currentMonday).add(1+nextMonday, 'days').subtract(previousMonday,'days').format("YYYY-MM-DD") + " to " +
@@ -251,6 +253,7 @@ export default class ShiftController {
 	}
 
 	submitData(){
+
 		if(changedData.length!=0){
 			var data=[];
 			_.each(changedData,(object)=>{
