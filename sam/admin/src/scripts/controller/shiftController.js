@@ -1,5 +1,6 @@
 import shiftService from './../services/shiftService.js';
 import loginService from './../services/loginService.js';
+import infoService from './../services/infoService.js';
 
 var curr = new Date;
 var weekNumber = moment(curr).week();
@@ -10,6 +11,7 @@ var ShiftNames;
 var nextMonday=0;
 var previousMonday=7;
 var changedData={};
+var noRowsAvailable;
 export default class ShiftController {
 
 	constructor($http, $q,NgTableParams,$filter, ngTableDefaults) {
@@ -73,16 +75,22 @@ export default class ShiftController {
 						}
 						return _.extend(i, eo);
 					});
-
-					self.tableParams = new NgTableParams({
-					},
-						{
-						getData: function() {
-							return response;
-						},
-							counts: []
+					if(response.length!=0) {
+						noRowsAvailable=false;
+						self.tableParams = new NgTableParams({
+							},
+							{
+								getData: function() {
+									return response;
+								},
+								counts: []
+							}
+						);
 					}
-					);
+					else{
+						noRowsAvailable=true;
+					}
+
 					
 				})
 				.catch((error) => {
@@ -90,6 +98,36 @@ export default class ShiftController {
 				});
 	}
 
+	getResponse(result){
+		return _.map(result, (i) => {
+			var eo = {};
+			for(var j=0; j<7; j++){
+				var d = i["day"+j.toString()];
+				if(_.findWhere(this.shifts, {id: d})!=undefined){
+					var dname = _.findWhere(this.shifts, {id: d}).shiftname;
+				}
+				else{
+					break;
+				}
+				eo["sday"+j.toString()] = dname;
+			}
+			return _.extend(i, eo);
+		});
+	}
+
+	getUserInfo($http, $q){
+		const svc = new infoService($http, $q);
+		return $q((resolve, reject) => {
+			svc.getAllUserInfo()
+				.then((result) => {
+					return resolve(result);
+				})
+				.catch((err) => {
+					console.log("response3: ", JSON.stringify(err));
+					return reject(err);
+				});
+		})
+	}
 
 
 	getShifts($http, $q){
@@ -111,6 +149,7 @@ export default class ShiftController {
 			svc.getEmployeeShifts(weekNo, year)
         .then((result) => {
 					const newResponse = getImagePath(result);
+
 					return resolve(newResponse);
 				})
 				.catch((err) => {
@@ -140,20 +179,13 @@ export default class ShiftController {
 		this.a = 5;
 		this.getEmployeeShifts($http, this.q, weekNumber, currentYear)
 			.then((result) => {
-				var response = _.map(result, (i) => {
-					var eo = {};
-					for(var j=0; j<7; j++){
-						var d = i["day"+j.toString()];
-						if(_.findWhere(this.shifts, {id: d})!=undefined){
-							var dname = _.findWhere(this.shifts, {id: d}).shiftname;
-						}
-						else{
-							break;
-						}
-						eo["sday"+j.toString()] = dname;
-					}
-					return _.extend(i, eo);
-				});
+				var response = this.getResponse(result);
+				if(response.length==0){
+					noRowsAvailable=true;
+				}
+				else{
+					noRowsAvailable=false;
+				}
 				self.tableParams = {reload:function(){},settings:function(){return {}}};
 				self.tableParams =  this.NgTableParams({}, { getData: function () {
 					return response;
@@ -184,20 +216,13 @@ export default class ShiftController {
 		this.a = 5;
 		this.getEmployeeShifts($http, this.q, weekNumber, currentYear)
 			.then((result) => {
-				var response = _.map(result, (i) => {
-					var eo = {};
-					for(var j=0; j<7; j++){
-						var d = i["day"+j.toString()];
-						if(_.findWhere(this.shifts, {id: d})!=undefined){
-							var dname = _.findWhere(this.shifts, {id: d}).shiftname;
-						}
-						else{
-							break;
-						}
-						eo["sday"+j.toString()] = dname;
-					}
-					return _.extend(i, eo);
-				});
+				var response = this.getResponse(result);
+				if(response.length==0){
+					noRowsAvailable=true;
+				}
+				else{
+					noRowsAvailable=false;
+				}
 				self.tableParams = {reload:function(){},settings:function(){return {}}};
 				self.tableParams =  this.NgTableParams({}, { getData: function () {
 					return response;
@@ -251,20 +276,13 @@ export default class ShiftController {
 					this.a = 5;
 					this.getEmployeeShifts(this.http, this.q, weekNumber, currentYear)
 						.then((result) => {
-							var response = _.map(result, (i) => {
-								var eo = {};
-								for(var j=0; j<7; j++){
-									var d = i["day"+j.toString()];
-									if(_.findWhere(this.shifts, {id: d})!=undefined){
-										var dname = _.findWhere(this.shifts, {id: d}).shiftname;
-									}
-									else{
-										break;
-									}
-									eo["sday"+j.toString()] = dname;
-								}
-								return _.extend(i, eo);
-							});
+							var response = this.getResponse(result);
+							if(response.length==0){
+								noRowsAvailable=true;
+							}
+							else{
+								noRowsAvailable=false;
+							}
 							self.tableParams = {reload:function(){},settings:function(){return {}}};
 							self.tableParams =  this.NgTableParams({}, { getData: function () {
 								return response;
@@ -291,6 +309,52 @@ export default class ShiftController {
 					return reject(err);
 				});
 		})
+	}
+
+	editShiftPlan(){
+		self.isEditable=true;
+		if(noRowsAvailable){
+			this.getUserInfo(this.http, this.q)
+				.then((result) => {
+					this.userInfo = result;
+					var response = _.map(result, (i) => {
+						var eo = {};
+						for(var j=0; j<7; j++){
+							eo["sday"+j.toString()] = "select";
+						}
+						return _.extend(i, eo);
+					});
+					response=getImagePath(response);
+					self.tableParams = new this.NgTableParams({
+						},
+						{
+							getData: function() {
+								return response;
+							},
+							counts: []
+						}
+					);
+
+				})
+				.catch((error) => {
+					this.errors.push("no user details found");
+				});
+		}
+	}
+
+	cancel(){
+		self.isEditable=false;
+		if(noRowsAvailable){
+			self.tableParams = new this.NgTableParams({
+				},
+				{
+					getData: function() {
+						return [];
+					},
+					counts: []
+				}
+			);
+		}
 	}
 }
 

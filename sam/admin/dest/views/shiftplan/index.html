@@ -12,125 +12,169 @@
     <script src="./../../contents/lib/UnderscoreService.js"></script>
     <script src="./../../contents/lib/jquery.js"></script>
     <script src="./../../contents/lib/bootstrap.js"></script>
-
+    <script src="./../../contents/lib/ng-table/dist/ng-table.js"></script>
     <script src="./../../app/app.js"></script>
 
-    <link href="./../../contents/images/logo.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="./../../contents/images/logo.ico" rel="shortcut icon" type="image/x-icon"/>
     <link href="./../../contents/css/bootstrap.css" rel="stylesheet">
+    <link href="./../../contents/css/ng-table.css" rel="stylesheet">
     <link href="./../../contents/css/fr.css" rel="stylesheet">
+    <link href="./../../contents/lib/ng-table/dist/ng-table.min.css" rel="stylesheet">
     <link href="./../../contents/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 </head>
 <body ng-app="sam" class="index" style="padding: 20px;" ng-controller="shiftController as shiftCtrl">
 
- <div ng-include="'./../views/partials/_header.html'" ng-init="vm='s'"></div>
+<div ng-include="'./../views/partials/_header.html'" ng-init="vm='s'"></div>
 
- <div class="container-fluid">
-     <div>
-         <div class="col-md-4"></div>
-         <div class="col-md-4"></div>
-         <div class="col-md-4">
-             <a style="cursor:pointer;" data-toggle="modal" data-target="#login" data-backdrop="static" data-keyboard="false">Edit Shift Plan</a>
-         </div>
-     </div>
+<div class="container-fluid">
+    <div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <a style="cursor:pointer;" data-toggle="modal" data-target="#" ng-click="shiftCtrl.editShiftPlan()"
+               data-backdrop="static" data-keyboard="false">Edit Shift Plan</a>
+        </div>
+    </div>
 
- <div style="text-align: center; color: #138D75;">
-   {{shiftCtrl.message}} <b>{{shiftCtrl.dateRange}}</b>
- </div>
- <br/>
- <div class="table-responsive">
-  <table class="table table-striped">
-   <tr>
-     <th style="display:none;">userId</th>
-     <th style="color: #138D75;">User</th>
-     <th ng-repeat="th in shiftCtrl.days" style="color: #138D75;">{{th.date}}</th>
-   </tr>
-   <tr ng-repeat="x in shiftCtrl.weeksShift">
-     <td style="display: none">{{ x.userid }}</td>
-     <td><a style="cursor:pointer" data-toggle="modal" data-target="#userModal" data-backdrop="static" data-keyboard="false" class="abc" data-user="{{x}}">{{ x.username }}</a></td>
-     <td ng-repeat="th in shiftCtrl.days" style="color: #873600;">
-          {{ x[th.id] }}
-     </td>
-   </tr>
- </table>
- </div>
+    <div style="text-align: center; color: #138D75;">
+        {{shiftCtrl.message}} <b>{{shiftCtrl.dateRange}}</b>
+    </div>
+    <div class="">
+        <button ng-click="shiftCtrl.getPreviousShift()" id="Mybtn" class="btn btn-default">Previous</button>
+        <button ng-click="shiftCtrl.getNextShift()" class="btn btn-default pull-right">Next</button>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table id="shiftDetails" ng-table="shiftCtrl.tableParams"
+               class="table table-condensed table-bordered table-striped">
+            <tr>
 
-<!-- Modal -->
- <div id="userModal" class="modal fade" role="dialog">
-     <div class="modal-dialog">
-         <div class="modal-content">
-             <div class="modal-header">
-                 <h4 class="modal-title" style="color:dodgerblue">User Info</h4>
-             </div>
-             <div class="modal-body" style="background-color: whitesmoke">
-                 <div class="row" style="text-align: left;">
-                     <div class="col-md-4">
-                         <div class="row" style="text-align: center; vertical-align: middle; padding: 10px;">
-                             <img id="userImg" style="height: 150px; width: 150px;border: 8px solid #EBEBEB; border-radius: 5px"/>
-                         </div>
-                         <br/>
-                     </div>
-                     <div class="col-md-8">
-                         <div class="row"><span class="col-md-4" style="color:dodgerblue;">Employee Id</span> <span class="col-md-8" style="color: black" id="userEmpId"></span></div>
-                         <div class="row"><hr/></div>
-                         <div class="row"><span class="col-md-4" style="color:dodgerblue;  ">Name</span> <span class="col-md-8" style="color: black" id="userName"></span></div>
-                         <div class="row"><hr/></div>
-                         <div class="row"><span class="col-md-4" style="color:dodgerblue;   ">Email Id</span> <span class="col-md-8" style="color: black" id="userEmail"></span></div>
-                         <div class="row"><hr/></div>
-                         <div class="row"><span class="col-md-4" style="color:dodgerblue;   ">Contact</span> <span class="col-md-8" style="color: black" id="userContact"></span></div>
-                     </div>
-                 </div>
-             </div>
-             <div class="modal-footer">
-                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-             </div>
-         </div>
-     </div>
- </div>
+                <!-- <th style="display:none;">userId</th>-->
+                <th style="color: #138D75;">User</th>
+                <th ng-repeat="th in shiftCtrl.days" style="color: #138D75;">{{th.date}}</th>
 
-     <div id="login" class="modal fade" role="dialog" ng-controller="loginController as loginCtrl">
-         <div class="modal-dialog">
-             <div class="modal-content">
-                 <div class="modal-header">
-                     <h4 class="modal-title" style="color:dodgerblue">Login</h4>
-                 </div>
-                 <div class="modal-body" >
-                     <div align="center">
-                         <div class="loginTable">
-                             <img src="./../../contents/images/Avatars/10.png" class="loginTopImage" alt="" />
-                             <div class="SmallGap"></div>
-                             <div><input type="text" class = "loginBigTextBoxs" ng-model="loginId" id="loginId" placeholder="login id"></div>
-                             <div><input type="password" class = "loginBigTextBoxs" ng-model="password1" id="password1" placeholder="password"></div>
-                             <div class="SmallGap"></div>
-                             <div class="LoginRow">
-                                 <div class="LoginCol">
-                                     <div class="errorText">
-                                         <span class="field-validation-error" id="ErrorListForLogin" style="display: none"></span>
-                                     </div>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-                 <div class="modal-footer">
-                     <button type="submit" class="btn btn-primary" ng-click="loginCtrl.checkLogin(loginId,password1)">Login</button>
-                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                 </div>
-             </div>
-         </div>
-     </div>
-<script>
+            </tr>
+            <tr ng-repeat="x in $data">
+                <!--<td style="display: none">{{ x.userid }}</td>-->
+                <td><a style="cursor:pointer" data-toggle="modal" data-target="#userModal" data-backdrop="static"
+                       data-keyboard="false" class="abc" data-user="{{x}}">{{ x.username }}</a></td>
+                <td ng-show="!shiftCtrl.isEditable" ng-repeat="th in shiftCtrl.days" style="color: #873600;">
+                    {{ x[th.id] }}
+                </td>
+                <td ng-show="shiftCtrl.isEditable" ng-repeat="th in shiftCtrl.days" style="color: #873600;">
+                    <select ng-model="selectedValue"
+                            ng-init="selectedValue=(x[th.id]==undefined||null)?'select':x[th.id]"
+                            ng-change="shiftCtrl.changeShift(selectedValue,x.userid,th.id)">
+                        <option value="{{v.shiftname}}" ng-repeat="v in shiftCtrl.shifts">{{v.shiftname}}</option>
+                    </select>
+                </td>
 
-    $(document).on("click", ".abc", function () {
-        var user = $(this).data('user');
-        $("#userImg").attr("src", user.imgPath);
-        $("#userEmpId").text(user.employeeid);
-        $("#userName").text(user.username);
-        $("#userEmail").text(user.email);
-        $("#userContact").text(user.contact);
-    });
+            </tr>
+        </table>
+        <div>
+            <button ng-show="shiftCtrl.isEditable" style="margin-left: 20px;" ng-click="shiftCtrl.submitData()"
+                    class="btn btn-default pull-right">Submit
+            </button>
 
-</script>
+            <button ng-show="shiftCtrl.isEditable" ng-click="shiftCtrl.cancel()"
+                    class="btn btn-default pull-right">Cancel
+            </button>
+        </div>
+    </div>
 
+    <!-- Modal -->
+    <div id="userModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="color:dodgerblue">User Info</h4>
+                </div>
+                <div class="modal-body" style="background-color: whitesmoke">
+                    <div class="row" style="text-align: left;">
+                        <div class="col-md-4">
+                            <div class="row" style="text-align: center; vertical-align: middle; padding: 10px;">
+                                <img id="userImg"
+                                     style="height: 150px; width: 150px;border: 8px solid #EBEBEB; border-radius: 5px"/>
+                            </div>
+                            <br/>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row"><span class="col-md-4" style="color:dodgerblue;">Employee Id</span> <span
+                                    class="col-md-8" style="color: black" id="userEmpId"></span></div>
+                            <div class="row">
+                                <hr/>
+                            </div>
+                            <div class="row"><span class="col-md-4" style="color:dodgerblue;  ">Name</span> <span
+                                    class="col-md-8" style="color: black" id="userName"></span></div>
+                            <div class="row">
+                                <hr/>
+                            </div>
+                            <div class="row"><span class="col-md-4" style="color:dodgerblue;   ">Email Id</span> <span
+                                    class="col-md-8" style="color: black" id="userEmail"></span></div>
+                            <div class="row">
+                                <hr/>
+                            </div>
+                            <div class="row"><span class="col-md-4" style="color:dodgerblue;   ">Contact</span> <span
+                                    class="col-md-8" style="color: black" id="userContact"></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button " class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="login" class="modal fade" id="modal" role="dialog" ng-controller="loginController as loginCtrl">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" style="color:dodgerblue">Login</h4>
+                </div>
+                <div class="modal-body">
+                    <div align="center">
+                        <div class="loginTable">
+                            <img src="./../../contents/images/Avatars/10.png" class="loginTopImage" alt=""/>
+                            <div class="SmallGap"></div>
+                            <div><input type="text" class="loginBigTextBoxs" ng-model="loginId" id="loginId"
+                                        placeholder="login id"></div>
+                            <div><input type="password" class="loginBigTextBoxs" ng-model="password1" id="password1"
+                                        placeholder="password"></div>
+                            <div class="SmallGap"></div>
+                            <div class="LoginRow">
+                                <div class="LoginCol">
+                                    <div class="errorText">
+                                        <span class="field-validation-error" id="ErrorListForLogin"
+                                              style="display: none;color: red"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" ng-click="loginCtrl.checkLogin(loginId,password1)">
+                        Login
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        $(document).on("click", ".abc", function () {
+            var user = $(this).data('user');
+            $("#userImg").attr("src", user.imgPath);
+            $("#userEmpId").text(user.employeeid);
+            $("#userName").text(user.username);
+            $("#userEmail").text(user.email);
+            $("#userContact").text(user.contact);
+        });
+
+    </script>
+</div>
 </body>
 </html>
