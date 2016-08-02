@@ -22,37 +22,99 @@ class shiftData{
     var obj           = new dbAccess.Operations(base.id);
 
     return new Promises((resolve, reject) => {
-      obj.createTransaction(database.samDb)
-        .then((reult) => {
-          base.data.map(function (rowToBeUpdated) {
-            var model = {
-              "empId"    : rowToBeUpdated.userId,
-              "shift"    : rowToBeUpdated.Shift,
-              "shiftDate": rowToBeUpdated.ShiftDate
-            };
 
-            const updateQuery = queries.updateShiftData([model.empId, model.shift, model.shiftDate]);
-            obj.executeQuery(updateQuery)
-              .then((result) => {
-                rowProcessed++;
-                if (rowProcessed == base.data.length) {
-                  base.response.updateDone = true;
-                  obj.commitTransaction()
-                    .then(function(result){
-                      resolve(base.response);
-                    })
-                }
-              })
-              .catch((error) => {
-                reject(error);
-              });
+      base.data.map(function (rowToBeUpdated) {
+          var model = {
+            "empId"    : rowToBeUpdated.userId,
+            "shift"    : rowToBeUpdated.Shift,
+            "shiftDate": rowToBeUpdated.ShiftDate
+          };
 
-          });
+      const selectQuery = queries.selectShiftData([model.empId,model.shiftDate]);
+          obj.fetch(selectQuery, database.samDb)
+       .then((shiftDetails) => {
+         console.log("shiftDetails",shiftDetails);
 
+         if (shiftDetails.length !== 0){
+           obj.createTransaction(database.samDb)
+             .then(() => {
+               const updateQuery = queries.updateShiftData([model.empId, model.shift, model.shiftDate]);
+               console.log("updateQuery",updateQuery);
+               obj.executeQuery(updateQuery)
+                 .then((result) => {
+                   rowProcessed++;
+                   if (rowProcessed == base.data.length) {
+                     base.response.updateDone = true;
+                     obj.commitTransaction()
+                       .then(function (result) {
+                         console.log("result",result);
+                         resolve(base.response);
+                       })
+                   }
+                 })
+                 .catch((error) => {
+                   reject(error);
+                 });
+             });
+
+       }
+         else{
+           const selectDateQuery = queries.selectDate([model.shiftDate]);
+           base.db.fetch(selectDateQuery, database.samDb)
+             .then((dateDetails) => {
+               obj.createTransaction(database.samDb)
+                 .then(() => {
+                   var insertQuery    = queries.insertShiftDetails();
+                   if (dateDetails.length == 0) {
+                     var insertInMaster = queries.insertDate();
+                     insertQuery        = insertQuery.concat(insertInMaster);
+                     console.log("insertQuery",insertQuery);
+                     obj.executeQuery(insertQuery)
+                       .then((result) => {
+                         rowProcessed++;
+                         if (rowProcessed == base.data.length) {
+                           base.response.updateDone = true;
+                           obj.commitTransaction()
+                             .then(function (result) {
+                               resolve(base.response);
+                             })
+                         }
+                       })
+                       .catch((error) => {
+                         reject(error);
+                       });
+                   }
+                else{
+                     obj.executeQuery(insertQuery)
+                       .then((result) => {
+                         rowProcessed++;
+                         if (rowProcessed == base.data.length) {
+                           base.response.updateDone = true;
+                           obj.commitTransaction()
+                             .then(function (result) {
+                               resolve(base.response);
+                             })
+                         }
+                       })
+                       .catch((error) => {
+                         reject(error);
+                       });
+
+                   }
+
+                   obj.commitTransaction();
+                 })
+
+             })
+             .catch((error) => {
+               reject(error);
+             });
+         }
+       })
+            .catch((error) => {
+              reject(error);
+            })
     })
-      .catch((error) => {
-        reject(error);
-      })
   });
   }
 }

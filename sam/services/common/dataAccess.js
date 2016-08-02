@@ -122,9 +122,7 @@ function createTranPromise(base, db) {
  */
 function executeQueryPromise(base, query) {
   return new Promises((resolve, reject) => {
-    console.log("newQuery is "  +JSON.stringify(query));
-
-    base.txn.query(query, (err, result) => {
+    base.txn.query(query.value.text, query.value.values, (err, result) => {
       if (err) {
         base.txn.rollback();
         return reject(err);
