@@ -240,14 +240,9 @@ export default class ShiftController {
 		var a=_.filter(self.days,(day) => {
 			return day.id==date;
 		});
-		
-		var shift=_.filter(self.shifts,(shift)=>{
-			return shift.shiftname==value;
-		})[0].id
-		
 		changedData[employeeid+a[0].date]={
 			"userId":employeeid,
-			"Shift":shift,
+			"Shift":value,
 			"ShiftDate":a[0].date
 		};
 	}
