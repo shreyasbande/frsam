@@ -2,6 +2,8 @@
 const dbAccess = include('common/dataAccess.js');
 const queries  = include('api/updateShift/queries.js');
 const database = include('common/config.js');
+const moment = require('moment');
+const _ = require('underscore');
 
 class shiftData{
   constructor(data,id){
@@ -43,6 +45,7 @@ class shiftData{
                obj.executeQuery(updateQuery)
                  .then((result) => {
                    rowProcessed++;
+                   console.log("rowProcessed",rowProcessed," base.data.length ",base.data.length);
                    if (rowProcessed == base.data.length) {
                      base.response.updateDone = true;
                      obj.commitTransaction()
@@ -59,50 +62,77 @@ class shiftData{
 
        }
          else{
+           var date = moment(model.shiftDate, "YYYY-MM-DD HH:mm:ss");
+           var sdate=moment(date).day();
+           var smonth=moment(date).month()+1;
+           var  syear=moment(date).year();
+           var  weekno= moment(date).week();
+           var  isweekend=false;
+           var weekday=date.format('dddd');
+           var days=['Monday','Tuesday','Wednesday','Thusday','Friday','Saturday','Sunday'];
+           var count=0;
+           var map = _.object(_.map(days, function(item) {
+
+             var obj= [count, item];
+             count++;
+             return obj;
+           }));
+           var day= _.keys(_.pick(map, function(value) {
+           if(value==weekday)
+             return value;
+           }));
+           if(weekday=='Sunday' || 'Saturday' )
+           {
+             isweekend=true;
+           }
            const selectDateQuery = queries.selectDate([model.shiftDate]);
-           base.db.fetch(selectDateQuery, database.samDb)
+            base.db.fetch(selectDateQuery, database.samDb)
              .then((dateDetails) => {
                obj.createTransaction(database.samDb)
                  .then(() => {
-                   var insertQuery    = queries.insertShiftDetails();
                    if (dateDetails.length == 0) {
-                     var insertInMaster = queries.insertDate();
-                     insertQuery        = insertQuery.concat(insertInMaster);
-                     console.log("insertQuery",insertQuery);
-                     obj.executeQuery(insertQuery)
+                     var insertInMaster = queries.insertDate([sdate, smonth, syear, model.shiftDate, weekno, isweekend, day[0]]);
+                    console.log("insertInMaster",insertInMaster);
+                     obj.executeQuery(insertInMaster)
                        .then((result) => {
-                         rowProcessed++;
-                         if (rowProcessed == base.data.length) {
-                           base.response.updateDone = true;
-                           obj.commitTransaction()
-                             .then(function (result) {
-                               resolve(base.response);
-                             })
-                         }
+                         var insertQuery = queries.insertShiftDetails([model.empId, model.shiftDate, model.shift]);
+                          console.log("insertQuery",insertQuery);
+                         obj.executeQuery(insertQuery)
+                           .then((result) => {
+                             rowProcessed++;
+                                if (rowProcessed == base.data.length) {
+                                  base.response.updateDone = true;
+                                  obj.commitTransaction()
+                                       .then(function (result) {
+                                         resolve(base.response);
+                                       })
+                                   }
+                           })
+
                        })
                        .catch((error) => {
+                         console.log("error",error);
                          reject(error);
                        });
                    }
-                else{
+                   else{
+                     var insertQuery = queries.insertShiftDetails([model.empId, model.shiftDate, model.shift]);
                      obj.executeQuery(insertQuery)
-                       .then((result) => {
-                         rowProcessed++;
-                         if (rowProcessed == base.data.length) {
-                           base.response.updateDone = true;
-                           obj.commitTransaction()
-                             .then(function (result) {
-                               resolve(base.response);
-                             })
-                         }
-                       })
-                       .catch((error) => {
-                         reject(error);
-                       });
+                     .then((result) => {
+                       rowProcessed++;
+                       if (rowProcessed == base.data.length) {
+                         base.response.updateDone = true;
+                         obj.commitTransaction()
+                           .then(function (result) {
+                             resolve(base.response);
+                           })
+                       }
+                     })
+                     .catch((error) => {
+                       reject(error);
+                     });
+                 }
 
-                   }
-
-                   obj.commitTransaction();
                  })
 
              })
