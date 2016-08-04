@@ -1,28 +1,27 @@
 import loginService from './../services/loginService.js';
+import headerController from './../controller/headerController.js';
 
 export default class LoginController {
-  constructor($http, $q,$cookies,$location) {
-    this.http=$http;
-    this.q=$q;
-    this.cookies=$cookies;
-    this.message="";
-    this.loginHide=true;
-    this.loginBox=false;
-    this.loginMsg=true;
+  constructor($http, $q, $cookies, $rootScope) {
+    this.http     = $http;
+    this.q        = $q;
+    this.cookies  = $cookies;
+    this.rootScope    = $rootScope;
+    this.message  = "";
+    this.loginBox = false;
+    this.loginMsg = true;
 
-    if(this.cookies.get('token')){
-      var message=new loginService($http, $q,$cookies);
-      var responseType=message.getResType();
-      if (responseType!="Invalid username or password") {
-        this.message=responseType;
-        //document.getElementById("login").style.visibility = "hidden";
-        //document.getElementById("successLogin").style.display = "block";
-        this.loginHide=false;
-        this.loginBox=true;
-        this.loginMsg=false;
+    if (this.cookies.get('token')) {
+      console.log(this.cookies.get('token'));
+      var message      = new loginService($http, $q, $cookies);
+      var responseType = message.getResType();
+      if (responseType != "Invalid username or password") {
+        this.message   = responseType;
+        this.loginBox  = true;
+        this.loginMsg  = false;
       }
     }
-    //this.location=$location;
+
   }
 
   checkLogin(Id, password) {
@@ -45,21 +44,15 @@ export default class LoginController {
         $("#ErrorListForLogin").css('display', 'block');
       }
       else {
-        const svc = new loginService(this.http,this.q,this.cookies);
+        const svc = new loginService(this.http, this.q, this.cookies);
         return this.q((resolve, reject) => {
           svc.getLoginData(Id, password)
             .then((result) => {
-              if (result.resTypeMessage!="Invalid username or password") {
-                this.message=result.resTypeMessage;
-                //document.getElementById("login").style.visibility = "hidden";
-                //document.getElementById("successLogin").style.display = "block";
-                this.loginHide=false;
-                this.loginBox=true;
-                this.loginMsg=false;
-                console.log(this.loginHide)
-                //$(".btn-default").click();
-                //this.location.path("./views/admin");
-               // window.open("./views/admin/admin.html","_self");
+              if (result.resTypeMessage != "Invalid username or password") {
+                this.message   = result.resTypeMessage;
+                this.rootScope.$broadcast('hide', { message: true });
+                this.loginBox  = true;
+                this.loginMsg  = false;
               }
               else {
                 $("#ErrorListForLogin").text(result.resTypeMessage);
@@ -77,10 +70,5 @@ export default class LoginController {
         })
       }
     }
-  }
-  logout(){
-    console.log("logout")
-    this.cookies.remove("token");
-    window.open("/","_self");
   }
 }
